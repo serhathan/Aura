@@ -159,6 +159,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Device.h" />
+    <ClInclude Include="src\Instance.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Window.h" />
@@ -166,6 +168,8 @@
     <ClInclude Include="src\VulkanContext.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Device.cpp" />
+    <ClCompile Include="src\Instance.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -176,7 +180,6 @@
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\SwapChain.cpp" />
-    <ClCompile Include="src\VulkanContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Libraries\lib\glfw3.lib" />
