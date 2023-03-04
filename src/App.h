@@ -1,9 +1,10 @@
 #pragma once
 #include"pch.h"
 #include <Window.h>
-#include "VulkanContext.h"
-#include <Instance.h>
-#include <Device.h>
+#include <Pipeline.h>
+#include "Device.h"
+#include <SwapChain.h>
+#include <Model.h>
 namespace Aura {
 
 	class App
@@ -12,15 +13,29 @@ namespace Aura {
 		App();
 		~App();
 
+		App(const App& c) = delete;
+		App& operator=(const App& c) = delete;
+
 		void Run();
 
-	private:
-		bool m_Running = true;
-		Window *m_Window;
-		std::shared_ptr<Instance> m_Instance;
-		std::shared_ptr<Device> m_Device;
-		std::shared_ptr<VulkanContext> m_Context;
+		static constexpr uint32_t WITDH = 800;
+		static constexpr uint32_t HEIGHT = 600;
 
+	private:
+		void loadModels();
+		void createPipelineLayout();
+		void createPipeline();
+		void createCommandBuffers();
+		void drawFrame();
+
+		bool m_Running = true;
+		Window m_window {"Aura",WITDH,HEIGHT};
+		Device device {m_window};
+		SwapChain swapChain{ device,m_window.getExtent()};
+		std::unique_ptr<Pipeline> pipeline ;
+		VkPipelineLayout pipelineLayout;
+		std::vector<VkCommandBuffer> commandBuffers;
+		std::unique_ptr<Model> model;
 	};
 }
 

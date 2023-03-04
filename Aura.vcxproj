@@ -159,17 +159,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Device.h" />
-    <ClInclude Include="src\Instance.h" />
+    <ClInclude Include="src\Pipeline.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\SwapChain.h" />
-    <ClInclude Include="src\VulkanContext.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Device.cpp" />
-    <ClCompile Include="src\Instance.cpp" />
+    <ClCompile Include="src\Pipeline.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -184,6 +185,11 @@
   <ItemGroup>
     <Library Include="Libraries\lib\glfw3.lib" />
     <Library Include="Libraries\lib\vulkan-1.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\compile.bat" />
+    <None Include="shaders\simpleShader.frag" />
+    <None Include="shaders\simpleShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,22 +4,23 @@
 namespace Aura {
 
 	Window::Window(std::string title, uint32_t width, uint32_t height)
-		: m_Title(title),m_Width(width),m_Height(height)
+		: m_title(title),m_width(width),m_height(height)
 	{
-		CreateInstance();
+		Init();
 	}
 	Window::~Window()
 	{
 		CleanUp();
 	}
 
-	void Window::CreateInstance() 
+	void Window::Init() 
 	{
 		glfwInit();
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		m_Window = glfwCreateWindow(m_Width, m_Height, m_Title.c_str(), nullptr, nullptr);
-		glfwGetWindowUserPointer(m_Window);
+		m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
+		glfwGetWindowUserPointer(m_window);
 		//glfwSetFramebufferSizeCallback(m_Window, FrameBufferResizeCallback);
+		
 	}
 
 	void Window::OnUpdate()
@@ -27,13 +28,24 @@ namespace Aura {
 		glfwPollEvents();
 	}
 
+	void Window::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
+	{
+		if (glfwCreateWindowSurface(instance, m_window, nullptr, surface) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create window surface!");
+		}
+	}
+
+
+
 
 	void Window::CleanUp()
 	{
-		glfwDestroyWindow(m_Window);
+		glfwDestroyWindow(m_window);
 
 		glfwTerminate();
 	}
+
+
 
 
 	/*static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height)

@@ -2,7 +2,6 @@
 #include <string>
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-
 namespace Aura {
 	static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height);
 
@@ -13,26 +12,23 @@ namespace Aura {
 		Window(std::string title, uint32_t width, uint32_t height);
 		~Window();
 
-		void OnUpdate();
+		Window(const Window& c) = delete;
+		Window &operator=(const Window& c) =delete;
 			
-
-		bool ShouldCloseWindow() const { return glfwWindowShouldClose(m_Window); }
-		uint32_t GetWidth() const  { return m_Width; }
-		uint32_t GetHeight() const  { return m_Height; }
-		std::string GetTitle() const { return m_Title; }
-		GLFWwindow* GetWindow() const { return m_Window;}
+		bool ShouldCloseWindow() const { return glfwWindowShouldClose(m_window); }
+		void OnUpdate();
+		void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
+		VkExtent2D getExtent() {return {m_width,m_height}; }
 
 	private:
-		void CreateInstance();
+		void Init();
 		void CleanUp();
 
-
 	private:
-		GLFWwindow* m_Window;
-		std::string m_Title;
-		uint32_t m_Width, m_Height;
+		GLFWwindow* m_window;
+		std::string m_title;
+		uint32_t m_width, m_height;
 		bool frameBufferResized = false;
-
 
 	};
 }
