@@ -17,9 +17,11 @@ namespace Aura {
 	{
 		glfwInit();
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+
 		m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
-		glfwGetWindowUserPointer(m_window);
-		//glfwSetFramebufferSizeCallback(m_Window, FrameBufferResizeCallback);
+		glfwSetWindowUserPointer(m_window,this);
+		glfwSetFramebufferSizeCallback(m_window, frameBufferResizeCallback);
 		
 	}
 
@@ -48,9 +50,11 @@ namespace Aura {
 
 
 
-	/*static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height)
+	void Window::frameBufferResizeCallback(GLFWwindow* window, int width, int height)
 	{
-		auto app = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-		app->frameBufferResized = true;
-	}*/
+		auto appWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+		appWindow->frameBufferResized = true;
+		appWindow->m_width = width;
+		appWindow->m_height = height;
+	}
 }

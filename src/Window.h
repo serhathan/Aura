@@ -19,11 +19,12 @@ namespace Aura {
 		void OnUpdate();
 		void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
 		VkExtent2D getExtent() {return {m_width,m_height}; }
-
+		bool wasWindowResized() {return frameBufferResized;}
+		void resetWindowResizedFlag() {frameBufferResized = false;}
 	private:
 		void Init();
 		void CleanUp();
-
+		static void frameBufferResizeCallback(GLFWwindow* window, int width, int height);
 	private:
 		GLFWwindow* m_window;
 		std::string m_title;

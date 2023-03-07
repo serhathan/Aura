@@ -33,7 +33,7 @@ namespace Aura {
 		Device(const Device& c) = delete;
 		Device(const Device&& c) = delete;
 		Device& operator=(const Device&& c) = delete;
-		void operator=(const Device& c) = delete;
+		Device& operator=(const Device& c) = delete;
 
 		VkCommandPool getCommandPool() { return commandPool; }
 		VkDevice device() { return device_; }

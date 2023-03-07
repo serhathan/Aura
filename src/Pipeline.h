@@ -5,9 +5,9 @@ namespace Aura {
 
 	struct PipelineConfigInfo {
 		PipelineConfigInfo() = default;
-		PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
-		VkViewport viewport;
-		VkRect2D scissor;
+		PipelineConfigInfo(const PipelineConfigInfo& c) = delete;
+		PipelineConfigInfo& operator=(const PipelineConfigInfo& c) = delete;
+
 		VkPipelineViewportStateCreateInfo viewportInfo;
 		VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 		VkPipelineRasterizationStateCreateInfo rasterizationInfo;
@@ -15,6 +15,8 @@ namespace Aura {
 		VkPipelineColorBlendAttachmentState colorBlendAttachment;
 		VkPipelineColorBlendStateCreateInfo colorBlendInfo;
 		VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
+		std::vector<VkDynamicState> dynamicStateEnables;
+		VkPipelineDynamicStateCreateInfo dynamicStateInfo;
 		VkPipelineLayout pipelineLayout = nullptr;
 		VkRenderPass renderPass = nullptr;
 		uint32_t subpass = 0;
@@ -23,14 +25,15 @@ namespace Aura {
 	class Pipeline
 	{
 	public:
+		Pipeline() = default;
 		Pipeline(Device& device,const std::string& vertexPath, const std::string& fragmentPath,const PipelineConfigInfo& configInfo);
 		~Pipeline();
 
 		Pipeline(const Pipeline& c) = delete;
-		void operator=(const Pipeline& c) = delete;
+		Pipeline& operator=(const Pipeline& c) = delete;
 
 		void bind(VkCommandBuffer commandBuffer);
-		static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo, uint32_t width, uint32_t height);
+		static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
 
 	private:
 		static std::vector<char> readFile(const std::string& filePath);
