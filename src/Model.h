@@ -10,7 +10,7 @@ namespace Aura{
 
 	struct Vertex
 	{
-		glm::vec2 position;
+		glm::vec3 position;
 		glm::vec3 color;
 
 		static std::vector<VkVertexInputBindingDescription> getBindingDescriptions() {
@@ -26,7 +26,7 @@ namespace Aura{
 
 			attributeDesc[0].binding = 0;
 			attributeDesc[0].location = 0;
-			attributeDesc[0].format = VK_FORMAT_R32G32_SFLOAT;
+			attributeDesc[0].format = VK_FORMAT_R32G32B32_SFLOAT;
 			attributeDesc[0].offset = 0;
 
 			attributeDesc[1].binding = 0;
