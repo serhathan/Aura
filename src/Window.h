@@ -21,6 +21,8 @@ namespace Aura {
 		VkExtent2D getExtent() {return {m_width,m_height}; }
 		bool wasWindowResized() {return frameBufferResized;}
 		void resetWindowResizedFlag() {frameBufferResized = false;}
+		GLFWwindow* getGLFWwindow() const { return m_window; }
+
 	private:
 		void Init();
 		void CleanUp();

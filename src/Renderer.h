@@ -32,6 +32,7 @@ namespace Aura {
 			assert(isFrameStarted && "Cannot get frame index when frame not in progress");
 			return currentFrameIndex;
 		}
+		float getAspectRation() const { return swapChain->extentAspectRatio(); }
 	private:
 		void createCommandBuffers();
 		void freeComandBuffers();

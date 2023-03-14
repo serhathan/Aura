@@ -3,6 +3,7 @@
 #include <Pipeline.h>
 #include "Device.h"
 #include <GameObject.h>
+#include <Camera.h>
 
 namespace Aura {
 
@@ -14,7 +15,7 @@ namespace Aura {
 
 		SimpleRenderSystem(const SimpleRenderSystem& c) = delete;
 		SimpleRenderSystem& operator=(const SimpleRenderSystem& c) = delete;
-		void renderGameObjects(VkCommandBuffer commandBuffer,std::vector<GameObject> &gameObjects);
+		void renderGameObjects(VkCommandBuffer commandBuffer,std::vector<GameObject> &gameObjects, Camera &camera);
 
 
 	private:

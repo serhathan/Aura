@@ -159,6 +159,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Keyboard.h" />
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\SimpleRenderSystem.h" />
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Model.h" />
@@ -171,6 +173,8 @@
     <ClInclude Include="src\SwapChain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Keyboard.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\SimpleRenderSystem.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Device.cpp" />

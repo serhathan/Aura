@@ -14,5 +14,6 @@
 #include <set>
 #include <optional>
 #include <cassert>
+#include <chrono>
 
 #include <vulkan/vulkan.h>
