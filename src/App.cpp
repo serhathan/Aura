@@ -17,9 +17,9 @@ namespace Aura {
 	void App::Run()
 	{
 		SimpleRenderSystem simpleRenderSystem(device, renderer.getSwapChainRenderPass());
-		Camera camera {};
+		Camera camera{};
 		//camera.setViewTarget(glm::vec3(0.f,0.f,0.f),glm::vec3(0.0f,0.2f,1.f));
-		camera.setViewTarget(glm::vec3(-1.f,-2.f,2.f),glm::vec3(0.f,0.f,2.5f));
+		camera.setViewTarget(glm::vec3(-1.f, -2.f, 2.f), glm::vec3(0.f, 0.f, 2.5f));
 
 		auto viewerObject = GameObject::createGameObject();
 		Keyboard cameraController{};
@@ -40,12 +40,12 @@ namespace Aura {
 
 			float aspect = renderer.getAspectRation();
 			//camera.setOrthographicProjection(-aspect, aspect, -1.f, 1.f, -1.f, 1.f);
-			camera.setPerspectiveProjection(glm::radians(45.f),aspect,0.1f,10.f);
+			camera.setPerspectiveProjection(glm::radians(45.f), aspect, 0.1f, 10.f);
 
 			if (auto commandBuffer = renderer.beginFrame())
 			{
 				renderer.beginSwapChainRenderPass(commandBuffer);
-				simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects,camera);
+				simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects, camera);
 				renderer.endSwapChainRenderPass(commandBuffer);
 				renderer.endFrame();
 			}
@@ -56,7 +56,7 @@ namespace Aura {
 
 	std::unique_ptr<Model> createCubeModel(Device& device, glm::vec3 offset)
 	{
-		Builder modelBuilder {};
+		Builder modelBuilder{};
 		modelBuilder.vertices = {
 			// left face (white)
 			{{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
@@ -106,12 +106,12 @@ namespace Aura {
 
 	void App::loadGameObjects()
 	{
-		std::shared_ptr<Model> model =  createCubeModel(device,{0.f,0.f,0.f});
+		std::shared_ptr<Model> model = Model::createModelFormFile(device, "models/smooth_vase.obj");
 
-		auto cube  = GameObject::createGameObject();
+		auto cube = GameObject::createGameObject();
 		cube.model = model;
-		cube.transform.translation = {0.f,0.f,2.5f};
-		cube.transform.scale = {.5f,.5f,.5f};
+		cube.transform.translation = { 0.f,0.f,2.5f };
+		cube.transform.scale = { .5f,.5f,.5f };
 		gameObjects.push_back(std::move(cube));
 	}
 }

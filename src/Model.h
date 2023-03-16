@@ -6,12 +6,13 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 
-namespace Aura{
-
+namespace Aura {
 	struct Vertex
 	{
 		glm::vec3 position;
 		glm::vec3 color;
+		glm::vec3 normal;
+		glm::vec2 uv;
 
 		static std::vector<VkVertexInputBindingDescription> getBindingDescriptions() {
 			std::vector<VkVertexInputBindingDescription> bindingDesc(1);
@@ -32,37 +33,41 @@ namespace Aura{
 			attributeDesc[1].binding = 0;
 			attributeDesc[1].location = 1;
 			attributeDesc[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-			attributeDesc[1].offset = offsetof(Vertex,color);
+			attributeDesc[1].offset = offsetof(Vertex, color);
 
 			return attributeDesc;
 		}
 
+		bool operator==(const Vertex& other) const {
+			return position == other.position && color == other.color && uv == other.uv;
+		}
 	};
 
-	struct Builder 
+	struct Builder
 	{
-		std::vector<Vertex> vertices {};
-		std::vector<uint32_t> indices {};
+		std::vector<Vertex> vertices{};
+		std::vector<uint32_t> indices{};
 
-
+		void loadModel(const std::string& filePath);
 	};
 
 	class Model
 	{
 	public:
-		
-		Model(Device& device,const Builder& builder);
+
+		Model(Device& device, const Builder& builder);
 		~Model();
 		Model(const Model& c) = delete;
-		Model& operator=(const Model& c)=delete;
+		Model& operator=(const Model& c) = delete;
 
 		void bind(VkCommandBuffer commandBuffer);
 		void draw(VkCommandBuffer commandBuffer);
 
+		static std::unique_ptr<Model> createModelFormFile(Device& device, const std::string& filePath);
+
 	private:
 		void createVertexBuffer(const std::vector<Vertex>& vertices);
 		void createIndexBuffer(const std::vector<uint32_t>& indices);
-
 
 		Device& device;
 
@@ -74,6 +79,5 @@ namespace Aura{
 		VkBuffer indexBuffer;
 		VkDeviceMemory indexBufferMemory;
 		uint32_t indexCount;
-
 	};
 }
