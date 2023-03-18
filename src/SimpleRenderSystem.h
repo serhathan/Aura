@@ -7,6 +7,13 @@
 
 namespace Aura {
 
+	struct FrameInfo {
+		int frameIndex;
+		float frameTime;
+		VkCommandBuffer commandBuffer;
+		Camera& camera;
+	};
+
 	class SimpleRenderSystem
 	{
 	public:
@@ -15,7 +22,7 @@ namespace Aura {
 
 		SimpleRenderSystem(const SimpleRenderSystem& c) = delete;
 		SimpleRenderSystem& operator=(const SimpleRenderSystem& c) = delete;
-		void renderGameObjects(VkCommandBuffer commandBuffer,std::vector<GameObject> &gameObjects, Camera &camera);
+		void renderGameObjects(FrameInfo& frameInfo,std::vector<GameObject> &gameObjects);
 
 
 	private:
