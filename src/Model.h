@@ -23,17 +23,12 @@ namespace Aura {
 		}
 
 		static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions() {
-			std::vector<VkVertexInputAttributeDescription> attributeDesc(2);
+			std::vector<VkVertexInputAttributeDescription> attributeDesc{};
 
-			attributeDesc[0].binding = 0;
-			attributeDesc[0].location = 0;
-			attributeDesc[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-			attributeDesc[0].offset = 0;
-
-			attributeDesc[1].binding = 0;
-			attributeDesc[1].location = 1;
-			attributeDesc[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-			attributeDesc[1].offset = offsetof(Vertex, color);
+			attributeDesc.push_back({ 0,0,VK_FORMAT_R32G32B32_SFLOAT,offsetof(Vertex,position) });
+			attributeDesc.push_back({ 1,0,VK_FORMAT_R32G32B32_SFLOAT,offsetof(Vertex,color) });
+			attributeDesc.push_back({ 2,0,VK_FORMAT_R32G32B32_SFLOAT,offsetof(Vertex,normal) });
+			attributeDesc.push_back({ 3,0,VK_FORMAT_R32G32_SFLOAT,offsetof(Vertex,uv) });
 
 			return attributeDesc;
 		}
