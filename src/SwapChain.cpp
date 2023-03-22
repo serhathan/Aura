@@ -3,17 +3,20 @@
 namespace Aura {
 
     SwapChain::SwapChain(Device& deviceRef, VkExtent2D extent)
-        : device{ deviceRef }, windowExtent{ extent } {
+        : device{ deviceRef }, windowExtent{ extent } 
+    {
         init();
     }
 
     SwapChain::SwapChain(Device& deviceRef, VkExtent2D extent, std::shared_ptr<SwapChain>previous)
-        : device{ deviceRef }, windowExtent{ extent },oldSwapChain(previous) {
+        : device{ deviceRef }, windowExtent{ extent },oldSwapChain(previous) 
+    {
         init();
         oldSwapChain = nullptr;
     }
 
-    SwapChain::~SwapChain() {
+    SwapChain::~SwapChain() 
+    {
         for (auto imageView : swapChainImageViews) {
             vkDestroyImageView(device.device(), imageView, nullptr);
         }
@@ -54,21 +57,12 @@ namespace Aura {
         createSyncObjects();
     }
 
-    VkResult SwapChain::acquireNextImage(uint32_t* imageIndex) {
-        vkWaitForFences(
-            device.device(),
-            1,
-            &inFlightFences[currentFrame],
-            VK_TRUE,
-            std::numeric_limits<uint64_t>::max());
+    VkResult SwapChain::acquireNextImage(uint32_t* imageIndex) 
+    {
+        vkWaitForFences(device.device(),1,&inFlightFences[currentFrame],VK_TRUE,std::numeric_limits<uint64_t>::max());
 
-        VkResult result = vkAcquireNextImageKHR(
-            device.device(),
-            swapChain,
-            std::numeric_limits<uint64_t>::max(),
-            imageAvailableSemaphores[currentFrame],  // must be a not signaled semaphore
-            VK_NULL_HANDLE,
-            imageIndex);
+        VkResult result = vkAcquireNextImageKHR(device.device(),swapChain,std::numeric_limits<uint64_t>::max(),
+            imageAvailableSemaphores[currentFrame],VK_NULL_HANDLE,imageIndex);
 
         return result;
     }
@@ -356,10 +350,9 @@ namespace Aura {
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
             if (vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) !=
-                VK_SUCCESS ||
-                vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) !=
-                VK_SUCCESS ||
-                vkCreateFence(device.device(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+                VK_SUCCESS || vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) !=
+                VK_SUCCESS || vkCreateFence(device.device(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) 
+            {
                 throw std::runtime_error("failed to create synchronization objects for a frame!");
             }
         }

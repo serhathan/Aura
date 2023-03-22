@@ -12,12 +12,13 @@ namespace Aura {
 		float frameTime;
 		VkCommandBuffer commandBuffer;
 		Camera& camera;
+		VkDescriptorSet globalDescriptorSet;
 	};
 
 	class SimpleRenderSystem
 	{
 	public:
-		SimpleRenderSystem(Device &device,VkRenderPass renderPass);
+		SimpleRenderSystem(Device &device,VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
 		~SimpleRenderSystem();
 
 		SimpleRenderSystem(const SimpleRenderSystem& c) = delete;
@@ -26,7 +27,7 @@ namespace Aura {
 
 
 	private:
-		void createPipelineLayout();
+		void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
 		void createPipeline(VkRenderPass renderPass);
 
 		Device &device;

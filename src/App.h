@@ -4,7 +4,7 @@
 #include "Device.h"
 #include <GameObject.h>
 #include "Renderer.h"
-
+#include "Descriptors.h"
 namespace Aura {
 
 	class App
@@ -28,6 +28,7 @@ namespace Aura {
 		Window m_window {"Aura",WITDH,HEIGHT};
 		Device device {m_window};
 		Renderer renderer {m_window,device};
+		std::unique_ptr<DescriptorPool> globalPool;
 		std::vector<GameObject> gameObjects;
 	};
 }

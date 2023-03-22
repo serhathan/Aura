@@ -10,12 +10,20 @@ namespace Aura {
 
 	struct GlobalUBO
 	{
-		glm::mat4 projectionView {1.f};
-		glm::vec3 lightDirection = glm::normalize(glm::vec3(1.f,-3.f,-1.f));
+		alignas(16) glm::mat4 projectionView {1.f};
+		alignas(16) glm::vec3 lightDirection = glm::normalize(glm::vec3(1.f,-3.f,-1.f));
 
 	};
 	App::App()
-	{
+	{	
+		DescriptorPool::Builder builder(device);
+
+		builder.setMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
+		builder.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,SwapChain::MAX_FRAMES_IN_FLIGHT);
+		
+		globalPool = builder.build();
+		
+
 		loadGameObjects();
 	}
 	App::~App()
@@ -35,7 +43,19 @@ namespace Aura {
 			uboBuffers[i]->map();
 		}
 
-		SimpleRenderSystem simpleRenderSystem(device, renderer.getSwapChainRenderPass());
+		DescriptorSetLayout::Builder builder(device);
+		builder.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT);
+		auto globalSetLayout = builder.build();
+
+		std::vector<VkDescriptorSet> globalDescriptorSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
+
+		for (int i = 0; i < globalDescriptorSets.size(); i++)
+		{
+			auto bufferInfo = uboBuffers[i]->descriptorInfo();
+			DescriptorWriter(*globalSetLayout, *globalPool).writeBuffer(0, &bufferInfo).build(globalDescriptorSets[i]);
+		}
+
+		SimpleRenderSystem simpleRenderSystem(device, renderer.getSwapChainRenderPass(),globalSetLayout->getDescriptorSetLayout());
 		Camera camera{};
 		//camera.setViewTarget(glm::vec3(0.f,0.f,0.f),glm::vec3(0.0f,0.2f,1.f));
 		camera.setViewTarget(glm::vec3(-1.f, -2.f, 2.f), glm::vec3(0.f, 0.f, 2.5f));
@@ -65,7 +85,7 @@ namespace Aura {
 			{
 				int frameIndex = renderer.getFrameIndex();
 
-				FrameInfo frameInfo = {frameIndex,frameTime,commandBuffer,camera};
+				FrameInfo frameInfo = {frameIndex,frameTime,commandBuffer,camera,globalDescriptorSets[frameIndex]};
 
 				//update
 				GlobalUBO ubo {};
@@ -137,7 +157,7 @@ namespace Aura {
 
 	void App::loadGameObjects()
 	{
-		std::shared_ptr<Model> model = Model::createModelFormFile(device, "models/flat_vase.obj");
+		std::shared_ptr<Model> model = Model::createModelFormFile(device, "models/colored_cube.obj");
 
 		auto flatVase = GameObject::createGameObject();
 		flatVase.model = model;
@@ -149,7 +169,7 @@ namespace Aura {
 		auto smoothVase = GameObject::createGameObject();
 		smoothVase.model = model;
 		smoothVase.transform.translation = { 0.5f,.5f,2.5f };
-		smoothVase.transform.scale = { .8f,.3f,.5f };
+		smoothVase.transform.scale = { 1.f,1.f,1.f };
 		gameObjects.push_back(std::move(smoothVase));
 	}
 }
