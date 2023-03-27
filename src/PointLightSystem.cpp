@@ -12,10 +12,10 @@ namespace Aura {
 		float radius;
 	};
 
-	PointLightSystem::PointLightSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout) : device(device)
+	PointLightSystem::PointLightSystem(Device& device, VkRenderPass m_renderPass, VkDescriptorSetLayout globalSetLayout) : device(device)
 	{
 		createPipelineLayout(globalSetLayout);
-		createPipeline(renderPass);
+		createPipeline(m_renderPass);
 	}
 
 	PointLightSystem::~PointLightSystem()
@@ -45,7 +45,7 @@ namespace Aura {
 
 	}
 
-	void PointLightSystem::createPipeline(VkRenderPass renderPass)
+	void PointLightSystem::createPipeline(VkRenderPass m_renderPass)
 	{
 		assert(pipelineLayout != nullptr && "Cannot create pipeline before pipeline layout");
 		PipelineConfigInfo pipelineConfig{};
@@ -54,7 +54,7 @@ namespace Aura {
 		pipelineConfig.attributeDesc.clear();
 		pipelineConfig.bindingDesc.clear();
 
-		pipelineConfig.renderPass = renderPass;
+		pipelineConfig.m_renderPass = m_renderPass;
 		pipelineConfig.pipelineLayout = pipelineLayout;
 		pipeline = std::make_unique<Pipeline>(device, "shaders/pointLight.vert.spv", "shaders/pointLight.frag.spv", pipelineConfig);
 	}

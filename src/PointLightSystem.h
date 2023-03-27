@@ -12,7 +12,7 @@ namespace Aura {
 	class PointLightSystem
 	{
 	public:
-		PointLightSystem(Device &device,VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
+		PointLightSystem(Device &device,VkRenderPass m_renderPass, VkDescriptorSetLayout globalSetLayout);
 		~PointLightSystem();
 
 		PointLightSystem(const PointLightSystem& c) = delete;
@@ -22,7 +22,7 @@ namespace Aura {
 		void update(FrameInfo& frameInfo, GlobalUBO& ubo);
 	private:
 		void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
-		void createPipeline(VkRenderPass renderPass);
+		void createPipeline(VkRenderPass m_renderPass);
 
 		Device &device;
 		std::unique_ptr<Pipeline> pipeline;

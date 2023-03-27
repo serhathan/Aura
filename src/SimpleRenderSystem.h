@@ -12,7 +12,7 @@ namespace Aura {
 	class SimpleRenderSystem
 	{
 	public:
-		SimpleRenderSystem(Device &device,VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
+		SimpleRenderSystem(Device &device,VkRenderPass m_renderPass, VkDescriptorSetLayout globalSetLayout);
 		~SimpleRenderSystem();
 
 		SimpleRenderSystem(const SimpleRenderSystem& c) = delete;
@@ -22,7 +22,7 @@ namespace Aura {
 
 	private:
 		void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
-		void createPipeline(VkRenderPass renderPass);
+		void createPipeline(VkRenderPass m_renderPass);
 
 		Device &device;
 		std::unique_ptr<Pipeline> pipeline;

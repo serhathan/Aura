@@ -36,7 +36,7 @@ namespace Aura {
 	void Pipeline::createGraphicsPipeline(const std::string& vertexPath, const std::string& fragmentPath, const PipelineConfigInfo& configInfo)
 	{
 		assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
-		assert(configInfo.renderPass != VK_NULL_HANDLE && "Cannot create graphics pipeline: no renderPass provided in configInfo");
+		assert(configInfo.m_renderPass != VK_NULL_HANDLE && "Cannot create graphics pipeline: no renderPass provided in configInfo");
 
 		auto vertShaderCode = readFile(vertexPath);
 		auto fragShaderCode = readFile(fragmentPath);
@@ -88,7 +88,7 @@ namespace Aura {
 		pipelineInfo.pDynamicState = &configInfo.dynamicStateInfo;
 
 		pipelineInfo.layout = configInfo.pipelineLayout;
-		pipelineInfo.renderPass = configInfo.renderPass;
+		pipelineInfo.m_renderPass = configInfo.m_renderPass;
 		pipelineInfo.subpass = configInfo.subpass;
 
 		pipelineInfo.basePipelineIndex = -1;

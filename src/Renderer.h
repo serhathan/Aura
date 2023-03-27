@@ -20,7 +20,7 @@ namespace Aura {
 		void endSwapChainRenderPass(VkCommandBuffer commandBuffer);
 
 		bool isFrameInProgress() const { return isFrameStarted; }
-		VkRenderPass getSwapChainRenderPass() const { return swapChain->getRenderPass(); }
+		VkRenderPass getSwapChainRenderPass() const { return swapChain->GetRenderPass(); }
 
 		VkCommandBuffer getCurrentCommandBuffer() const
 		{
@@ -32,7 +32,7 @@ namespace Aura {
 			assert(isFrameStarted && "Cannot get frame index when frame not in progress");
 			return currentFrameIndex;
 		}
-		float getAspectRation() const { return swapChain->extentAspectRatio(); }
+		float getAspectRation() const { return swapChain->GetExtentAspectRatio(); }
 	private:
 		void createCommandBuffers();
 		void freeComandBuffers();

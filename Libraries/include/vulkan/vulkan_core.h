@@ -3605,7 +3605,7 @@ typedef struct VkGraphicsPipelineCreateInfo {
     const VkPipelineColorBlendStateCreateInfo*       pColorBlendState;
     const VkPipelineDynamicStateCreateInfo*          pDynamicState;
     VkPipelineLayout                                 layout;
-    VkRenderPass                                     renderPass;
+    VkRenderPass                                     m_renderPass;
     uint32_t                                         subpass;
     VkPipeline                                       basePipelineHandle;
     int32_t                                          basePipelineIndex;
@@ -3744,7 +3744,7 @@ typedef struct VkFramebufferCreateInfo {
     VkStructureType             sType;
     const void*                 pNext;
     VkFramebufferCreateFlags    flags;
-    VkRenderPass                renderPass;
+    VkRenderPass                m_renderPass;
     uint32_t                    attachmentCount;
     const VkImageView*          pAttachments;
     uint32_t                    width;
@@ -3805,7 +3805,7 @@ typedef struct VkCommandBufferAllocateInfo {
 typedef struct VkCommandBufferInheritanceInfo {
     VkStructureType                  sType;
     const void*                      pNext;
-    VkRenderPass                     renderPass;
+    VkRenderPass                     m_renderPass;
     uint32_t                         subpass;
     VkFramebuffer                    framebuffer;
     VkBool32                         occlusionQueryEnable;
@@ -3896,7 +3896,7 @@ typedef struct VkImageResolve {
 typedef struct VkRenderPassBeginInfo {
     VkStructureType        sType;
     const void*            pNext;
-    VkRenderPass           renderPass;
+    VkRenderPass           m_renderPass;
     VkFramebuffer          framebuffer;
     VkRect2D               renderArea;
     uint32_t               clearValueCount;
@@ -3986,8 +3986,8 @@ typedef void (VKAPI_PTR *PFN_vkUpdateDescriptorSets)(VkDevice device, uint32_t d
 typedef VkResult (VKAPI_PTR *PFN_vkCreateFramebuffer)(VkDevice device, const VkFramebufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFramebuffer* pFramebuffer);
 typedef void (VKAPI_PTR *PFN_vkDestroyFramebuffer)(VkDevice device, VkFramebuffer framebuffer, const VkAllocationCallbacks* pAllocator);
 typedef VkResult (VKAPI_PTR *PFN_vkCreateRenderPass)(VkDevice device, const VkRenderPassCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkRenderPass* pRenderPass);
-typedef void (VKAPI_PTR *PFN_vkDestroyRenderPass)(VkDevice device, VkRenderPass renderPass, const VkAllocationCallbacks* pAllocator);
-typedef void (VKAPI_PTR *PFN_vkGetRenderAreaGranularity)(VkDevice device, VkRenderPass renderPass, VkExtent2D* pGranularity);
+typedef void (VKAPI_PTR *PFN_vkDestroyRenderPass)(VkDevice device, VkRenderPass m_renderPass, const VkAllocationCallbacks* pAllocator);
+typedef void (VKAPI_PTR *PFN_vkGetRenderAreaGranularity)(VkDevice device, VkRenderPass m_renderPass, VkExtent2D* pGranularity);
 typedef VkResult (VKAPI_PTR *PFN_vkCreateCommandPool)(VkDevice device, const VkCommandPoolCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkCommandPool* pCommandPool);
 typedef void (VKAPI_PTR *PFN_vkDestroyCommandPool)(VkDevice device, VkCommandPool commandPool, const VkAllocationCallbacks* pAllocator);
 typedef VkResult (VKAPI_PTR *PFN_vkResetCommandPool)(VkDevice device, VkCommandPool commandPool, VkCommandPoolResetFlags flags);
@@ -4498,12 +4498,12 @@ VKAPI_ATTR VkResult VKAPI_CALL vkCreateRenderPass(
 
 VKAPI_ATTR void VKAPI_CALL vkDestroyRenderPass(
     VkDevice                                    device,
-    VkRenderPass                                renderPass,
+    VkRenderPass                                m_renderPass,
     const VkAllocationCallbacks*                pAllocator);
 
 VKAPI_ATTR void VKAPI_CALL vkGetRenderAreaGranularity(
     VkDevice                                    device,
-    VkRenderPass                                renderPass,
+    VkRenderPass                                m_renderPass,
     VkExtent2D*                                 pGranularity);
 
 VKAPI_ATTR VkResult VKAPI_CALL vkCreateCommandPool(
@@ -14397,7 +14397,7 @@ typedef struct VkPhysicalDevicePrimitiveTopologyListRestartFeaturesEXT {
 typedef struct VkSubpassShadingPipelineCreateInfoHUAWEI {
     VkStructureType    sType;
     void*              pNext;
-    VkRenderPass       renderPass;
+    VkRenderPass       m_renderPass;
     uint32_t           subpass;
 } VkSubpassShadingPipelineCreateInfoHUAWEI;
 

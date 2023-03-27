@@ -19,8 +19,8 @@ namespace Aura {
 		void OnUpdate();
 		void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
 		VkExtent2D getExtent() {return {m_width,m_height}; }
-		bool wasWindowResized() {return frameBufferResized;}
-		void resetWindowResizedFlag() {frameBufferResized = false;}
+		bool wasWindowResized() {return m_frameBufferResized;}
+		void resetWindowResizedFlag() {m_frameBufferResized = false;}
 		GLFWwindow* getGLFWwindow() const { return m_window; }
 
 	private:
@@ -31,7 +31,7 @@ namespace Aura {
 		GLFWwindow* m_window;
 		std::string m_title;
 		uint32_t m_width, m_height;
-		bool frameBufferResized = false;
+		bool m_frameBufferResized = false;
 
 	};
 }

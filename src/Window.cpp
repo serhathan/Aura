@@ -53,7 +53,7 @@ namespace Aura {
 	void Window::frameBufferResizeCallback(GLFWwindow* window, int width, int height)
 	{
 		auto appWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-		appWindow->frameBufferResized = true;
+		appWindow->m_frameBufferResized = true;
 		appWindow->m_width = width;
 		appWindow->m_height = height;
 	}
