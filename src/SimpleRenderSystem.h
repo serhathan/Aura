@@ -4,16 +4,10 @@
 #include "Device.h"
 #include <GameObject.h>
 #include <Camera.h>
-
+#include "FrameInfo.h"
 namespace Aura {
 
-	struct FrameInfo {
-		int frameIndex;
-		float frameTime;
-		VkCommandBuffer commandBuffer;
-		Camera& camera;
-		VkDescriptorSet globalDescriptorSet;
-	};
+	
 
 	class SimpleRenderSystem
 	{
@@ -23,7 +17,7 @@ namespace Aura {
 
 		SimpleRenderSystem(const SimpleRenderSystem& c) = delete;
 		SimpleRenderSystem& operator=(const SimpleRenderSystem& c) = delete;
-		void renderGameObjects(FrameInfo& frameInfo,std::vector<GameObject> &gameObjects);
+		void renderGameObjects(FrameInfo& frameInfo);
 
 
 	private:

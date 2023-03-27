@@ -8,6 +8,9 @@ namespace Aura {
 		PipelineConfigInfo(const PipelineConfigInfo& c) = delete;
 		PipelineConfigInfo& operator=(const PipelineConfigInfo& c) = delete;
 
+		std::vector<VkVertexInputBindingDescription> bindingDesc{};
+		std::vector<VkVertexInputAttributeDescription> attributeDesc{};
+
 		VkPipelineViewportStateCreateInfo viewportInfo;
 		VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 		VkPipelineRasterizationStateCreateInfo rasterizationInfo;

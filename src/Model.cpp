@@ -68,7 +68,8 @@ namespace Aura {
 		stageBuffer.map();
 		stageBuffer.writeToBuffer((void*)vertices.data());
 
-		vertexBuffer = std::make_unique<Buffer>(device,vertexSize,vertexCount, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+		vertexBuffer = std::make_unique<Buffer>(device,vertexSize,vertexCount, 
+			VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
 
 		device.copyBuffer(stageBuffer.getBuffer(), vertexBuffer->getBuffer(), bufferSize);
@@ -85,7 +86,8 @@ namespace Aura {
 		VkDeviceSize bufferSize = sizeof(indices[0]) * indexCount;
 		uint32_t indexSize = sizeof(indices[0]);
 
-		Buffer stageBuffer(device,indexSize,indexCount, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		Buffer stageBuffer(device,indexSize,indexCount, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 		stageBuffer.map();
 		stageBuffer.writeToBuffer((void*)indices.data());

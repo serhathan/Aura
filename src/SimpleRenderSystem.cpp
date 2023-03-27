@@ -54,15 +54,15 @@ namespace Aura {
 		pipeline = std::make_unique<Pipeline>(device, "shaders/simpleShader.vert.spv", "shaders/simpleShader.frag.spv", pipelineConfig);
 	}
 
-	void SimpleRenderSystem::renderGameObjects(FrameInfo& frameInfo, std::vector<GameObject>& gameObjects)
+	void SimpleRenderSystem::renderGameObjects(FrameInfo& frameInfo)
 	{
 		pipeline->bind(frameInfo.commandBuffer);
 
 		vkCmdBindDescriptorSets(frameInfo.commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &frameInfo.globalDescriptorSet, 0, nullptr);
 
 
-		for (auto& obj : gameObjects) {
-
+		for (auto& kv : frameInfo.gameObjects) {
+			auto& obj = kv.second;
 			SimplePushConstantData push{};
 
 			push.modelMatrix = obj.transform.mat4();

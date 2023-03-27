@@ -5,6 +5,7 @@
 #include <GameObject.h>
 #include "Renderer.h"
 #include "Descriptors.h"
+#include "FrameInfo.h"
 namespace Aura {
 
 	class App
@@ -29,7 +30,7 @@ namespace Aura {
 		Device device {m_window};
 		Renderer renderer {m_window,device};
 		std::unique_ptr<DescriptorPool> globalPool;
-		std::vector<GameObject> gameObjects;
+		GameObject::Map gameObjects;
 	};
 }
 

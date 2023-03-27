@@ -6,14 +6,10 @@
 #include "SimpleRenderSystem.h"
 #include <Keyboard.h>
 #include <numeric>
+#include "PointLightSystem.h"
 namespace Aura {
 
-	struct GlobalUBO
-	{
-		alignas(16) glm::mat4 projectionView {1.f};
-		alignas(16) glm::vec3 lightDirection = glm::normalize(glm::vec3(1.f,-3.f,-1.f));
 
-	};
 	App::App()
 	{	
 		DescriptorPool::Builder builder(device);
@@ -34,17 +30,12 @@ namespace Aura {
 	{	
 		std::vector<std::unique_ptr<Buffer>> uboBuffers(SwapChain::MAX_FRAMES_IN_FLIGHT);
 		for (int i = 0; i < uboBuffers.size(); i++) {
-			uboBuffers[i] = std::make_unique<Buffer>(
-				device,
-				sizeof(GlobalUBO),
-				1,
-				VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-				VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+			uboBuffers[i] = std::make_unique<Buffer>(device,sizeof(GlobalUBO),1,VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
 			uboBuffers[i]->map();
 		}
 
 		DescriptorSetLayout::Builder builder(device);
-		builder.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT);
+		builder.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 		auto globalSetLayout = builder.build();
 
 		std::vector<VkDescriptorSet> globalDescriptorSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
@@ -56,11 +47,14 @@ namespace Aura {
 		}
 
 		SimpleRenderSystem simpleRenderSystem(device, renderer.getSwapChainRenderPass(),globalSetLayout->getDescriptorSetLayout());
+		PointLightSystem pointLight(device, renderer.getSwapChainRenderPass(), globalSetLayout->getDescriptorSetLayout());
+
 		Camera camera{};
 		//camera.setViewTarget(glm::vec3(0.f,0.f,0.f),glm::vec3(0.0f,0.2f,1.f));
 		camera.setViewTarget(glm::vec3(-1.f, -2.f, 2.f), glm::vec3(0.f, 0.f, 2.5f));
 
 		auto viewerObject = GameObject::createGameObject();
+		viewerObject.transform.translation.z = -2.5f;
 		Keyboard cameraController{};
 
 		auto currentTime = std::chrono::high_resolution_clock::now();
@@ -79,24 +73,31 @@ namespace Aura {
 
 			float aspect = renderer.getAspectRation();
 			//camera.setOrthographicProjection(-aspect, aspect, -1.f, 1.f, -1.f, 1.f);
-			camera.setPerspectiveProjection(glm::radians(45.f), aspect, 0.1f, 10.f);
+			camera.setPerspectiveProjection(glm::radians(45.f), aspect, 0.1f, 100.f);
 
 			if (auto commandBuffer = renderer.beginFrame())
 			{
 				int frameIndex = renderer.getFrameIndex();
 
-				FrameInfo frameInfo = {frameIndex,frameTime,commandBuffer,camera,globalDescriptorSets[frameIndex]};
+				FrameInfo frameInfo = {frameIndex,frameTime,commandBuffer,camera,globalDescriptorSets[frameIndex],gameObjects};
 
 				//update
 				GlobalUBO ubo {};
 
-				ubo.projectionView = camera.getProjection() * camera.getView();
+				ubo.projection = camera.getProjection();
+				ubo.view = camera.getView();
+
+				pointLight.update(frameInfo,ubo);
+
 				uboBuffers[frameIndex]->writeToBuffer(&ubo);
 				uboBuffers[frameIndex]->flush();
 
 				// render
 				renderer.beginSwapChainRenderPass(commandBuffer);
-				simpleRenderSystem.renderGameObjects(frameInfo, gameObjects);
+
+				simpleRenderSystem.renderGameObjects(frameInfo);
+				pointLight.render(frameInfo);
+
 				renderer.endSwapChainRenderPass(commandBuffer);
 				renderer.endFrame();
 			}
@@ -157,19 +158,49 @@ namespace Aura {
 
 	void App::loadGameObjects()
 	{
-		std::shared_ptr<Model> model = Model::createModelFormFile(device, "models/colored_cube.obj");
+		std::shared_ptr<Model> model = Model::createModelFormFile(device, "models/flat_vase.obj");
 
 		auto flatVase = GameObject::createGameObject();
 		flatVase.model = model;
-		flatVase.transform.translation = { -0.5f,0.5f,2.5f };
-		flatVase.transform.scale = { .8f,.3f,.5f };
-		gameObjects.push_back(std::move(flatVase));
+		flatVase.transform.translation = { -0.5f,0.5f,0.f };
+		flatVase.transform.scale = { 1.f,1.f,1.f };
+		gameObjects.emplace(flatVase.getId(), std::move(flatVase));
 
 		model = Model::createModelFormFile(device, "models/smooth_vase.obj");
 		auto smoothVase = GameObject::createGameObject();
 		smoothVase.model = model;
-		smoothVase.transform.translation = { 0.5f,.5f,2.5f };
+		smoothVase.transform.translation = { 0.5f,.5f,0.f };
 		smoothVase.transform.scale = { 1.f,1.f,1.f };
-		gameObjects.push_back(std::move(smoothVase));
+		gameObjects.emplace(smoothVase.getId(), std::move(smoothVase));
+
+		model = Model::createModelFormFile(device, "models/quad.obj");
+		auto quad = GameObject::createGameObject();
+		quad.model = model;
+		quad.transform.translation = { 0.f,.5f,0.f };
+		quad.transform.scale = { 3.f,1.f,3.f };
+		gameObjects.emplace(quad.getId(), std::move(quad));
+
+		std::vector<glm::vec3> lightColors{
+			  {1.f, .1f, .1f},
+			  {.1f, .1f, 1.f},
+			  {.1f, 1.f, .1f},
+			  {1.f, 1.f, .1f},
+			  {.1f, 1.f, 1.f},
+			  {1.f, 1.f, 1.f}  //
+		};
+
+		model = createCubeModel(device, glm::vec3(1.f));
+		for (int i = 0; i < lightColors.size(); i++) {
+			auto pointLight = GameObject::makePointLight(0.2f);
+			pointLight.model = model;
+			pointLight.color = lightColors[i];
+			auto rotateLight = glm::rotate(
+				glm::mat4(1.f),
+				(i * glm::two_pi<float>()) / lightColors.size(),
+				{ 0.f, -1.f, 0.f });
+			pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-1.f, -1.f, -1.f, 1.f));
+			gameObjects.emplace(pointLight.getId(), std::move(pointLight));
+		}
+		
 	}
 }

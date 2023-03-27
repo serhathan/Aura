@@ -62,8 +62,8 @@ namespace Aura {
 
 		VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 
-		auto bindingDescriptions = Vertex::getBindingDescriptions();
-		auto attributeDescriptions = Vertex::getAttributeDescriptions();
+		auto& bindingDescriptions = configInfo.bindingDesc;
+		auto& attributeDescriptions = configInfo.attributeDesc;
 
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -189,5 +189,8 @@ namespace Aura {
 		configInfo.dynamicStateInfo.dynamicStateCount =
 			static_cast<uint32_t>(configInfo.dynamicStateEnables.size());
 		configInfo.dynamicStateInfo.flags = 0;
+
+		configInfo.bindingDesc = Vertex::getBindingDescriptions();
+		configInfo.attributeDesc = Vertex::getAttributeDescriptions();
 	}
 }

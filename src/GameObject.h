@@ -12,10 +12,17 @@ namespace Aura {
 		glm::mat4 mat4();
 		glm::mat3 normalMatrix();
 	};
+
+	struct PointLightComponent 
+	{
+		float lightIntensity = 1.f;
+	};
+
 	class GameObject
 	{
 	public:
 		using  id_t = unsigned int;
+		using Map = std::unordered_map<id_t, GameObject>;
 
 		static GameObject createGameObject() {
 			static id_t current_id = 0;
@@ -29,7 +36,10 @@ namespace Aura {
 
 		id_t getId() const { return id; }
 
+		static GameObject makePointLight(float intensity = 10.f, float radius = 0.1f, glm::vec3 color = glm::vec3(1.f));
+
 		std::shared_ptr<Model> model{};
+		std::unique_ptr<PointLightComponent> pointLight = nullptr;
 		glm::vec3 color;
 		TransformComponent transform{};
 	private:

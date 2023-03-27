@@ -131,11 +131,7 @@ namespace Aura {
 	 * @return VkDescriptorBufferInfo of specified offset and range
 	 */
 	VkDescriptorBufferInfo Buffer::descriptorInfo(VkDeviceSize size, VkDeviceSize offset) {
-		return VkDescriptorBufferInfo{
-			buffer,
-			offset,
-			size,
-		};
+		return VkDescriptorBufferInfo{buffer,offset,size};
 	}
 
 	/**
