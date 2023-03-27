@@ -12,12 +12,12 @@ namespace Aura {
 
 	App::App()
 	{	
-		DescriptorPool::Builder builder(device);
+		DescriptorPool::Builder builder(m_device);
 
-		builder.setMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
-		builder.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,SwapChain::MAX_FRAMES_IN_FLIGHT);
+		builder.SetMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
+		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,SwapChain::MAX_FRAMES_IN_FLIGHT);
 		
-		globalPool = builder.build();
+		m_globalPool = builder.Build();
 		
 
 		loadGameObjects();
@@ -30,30 +30,30 @@ namespace Aura {
 	{	
 		std::vector<std::unique_ptr<Buffer>> uboBuffers(SwapChain::MAX_FRAMES_IN_FLIGHT);
 		for (int i = 0; i < uboBuffers.size(); i++) {
-			uboBuffers[i] = std::make_unique<Buffer>(device,sizeof(GlobalUBO),1,VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
-			uboBuffers[i]->map();
+			uboBuffers[i] = std::make_unique<Buffer>(m_device,sizeof(GlobalUBO),1,VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+			uboBuffers[i]->Map();
 		}
 
-		DescriptorSetLayout::Builder builder(device);
-		builder.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-		auto globalSetLayout = builder.build();
+		DescriptorSetLayout::Builder builder(m_device);
+		builder.AddBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+		auto globalSetLayout = builder.Build();
 
 		std::vector<VkDescriptorSet> globalDescriptorSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
 
 		for (int i = 0; i < globalDescriptorSets.size(); i++)
 		{
-			auto bufferInfo = uboBuffers[i]->descriptorInfo();
-			DescriptorWriter(*globalSetLayout, *globalPool).writeBuffer(0, &bufferInfo).build(globalDescriptorSets[i]);
+			auto bufferInfo = uboBuffers[i]->DescriptorInfo();
+			DescriptorWriter(*globalSetLayout, *m_globalPool).writeBuffer(0, &bufferInfo).Build(globalDescriptorSets[i]);
 		}
 
-		SimpleRenderSystem simpleRenderSystem(device, renderer.getSwapChainRenderPass(),globalSetLayout->getDescriptorSetLayout());
-		PointLightSystem pointLight(device, renderer.getSwapChainRenderPass(), globalSetLayout->getDescriptorSetLayout());
+		SimpleRenderSystem simpleRenderSystem(m_device, m_renderer.GetSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout());
+		PointLightSystem pointLight(m_device, m_renderer.GetSwapChainRenderPass(), globalSetLayout->GetDescriptorSetLayout());
 
 		Camera camera{};
 		//camera.setViewTarget(glm::vec3(0.f,0.f,0.f),glm::vec3(0.0f,0.2f,1.f));
-		camera.setViewTarget(glm::vec3(-1.f, -2.f, 2.f), glm::vec3(0.f, 0.f, 2.5f));
+		camera.SetViewTarget(glm::vec3(-1.f, -2.f, 2.f), glm::vec3(0.f, 0.f, 2.5f));
 
-		auto viewerObject = GameObject::createGameObject();
+		auto viewerObject = GameObject::CreateGameObject();
 		viewerObject.transform.translation.z = -2.5f;
 		Keyboard cameraController{};
 
@@ -69,41 +69,41 @@ namespace Aura {
 			currentTime = newTime;
 
 			cameraController.moveInPlaneXZ(m_window.getGLFWwindow(), frameTime, viewerObject);
-			camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
+			camera.SetViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
 
-			float aspect = renderer.getAspectRation();
+			float aspect = m_renderer.GetAspectRatio();
 			//camera.setOrthographicProjection(-aspect, aspect, -1.f, 1.f, -1.f, 1.f);
-			camera.setPerspectiveProjection(glm::radians(45.f), aspect, 0.1f, 100.f);
+			camera.SetPerspectiveProjection(glm::radians(45.f), aspect, 0.1f, 100.f);
 
-			if (auto commandBuffer = renderer.beginFrame())
+			if (auto commandBuffer = m_renderer.BeginFrame())
 			{
-				int frameIndex = renderer.getFrameIndex();
+				int frameIndex = m_renderer.GetFrameIndex();
 
-				FrameInfo frameInfo = {frameIndex,frameTime,commandBuffer,camera,globalDescriptorSets[frameIndex],gameObjects};
+				FrameInfo frameInfo = {frameIndex,frameTime,commandBuffer,camera,globalDescriptorSets[frameIndex],m_gameObjects};
 
 				//update
 				GlobalUBO ubo {};
 
-				ubo.projection = camera.getProjection();
-				ubo.view = camera.getView();
+				ubo.projection = camera.GetProjection();
+				ubo.view = camera.GetView();
 
-				pointLight.update(frameInfo,ubo);
+				pointLight.Update(frameInfo,ubo);
 
-				uboBuffers[frameIndex]->writeToBuffer(&ubo);
-				uboBuffers[frameIndex]->flush();
+				uboBuffers[frameIndex]->WriteToBuffer(&ubo);
+				uboBuffers[frameIndex]->Flush();
 
 				// render
-				renderer.beginSwapChainRenderPass(commandBuffer);
+				m_renderer.BeginSwapChainRenderPass(commandBuffer);
 
-				simpleRenderSystem.renderGameObjects(frameInfo);
-				pointLight.render(frameInfo);
+				simpleRenderSystem.RenderGameObjects(frameInfo);
+				pointLight.Render(frameInfo);
 
-				renderer.endSwapChainRenderPass(commandBuffer);
-				renderer.endFrame();
+				m_renderer.EndSwapChainRenderPass(commandBuffer);
+				m_renderer.EndFrame();
 			}
 		}
 
-		vkDeviceWaitIdle(device.device());
+		vkDeviceWaitIdle(m_device.GetDevice());
 	}
 
 	std::unique_ptr<Model> createCubeModel(Device& device, glm::vec3 offset)
@@ -158,27 +158,27 @@ namespace Aura {
 
 	void App::loadGameObjects()
 	{
-		std::shared_ptr<Model> model = Model::createModelFormFile(device, "models/flat_vase.obj");
+		std::shared_ptr<Model> model = Model::CreateModelFormFile(m_device, "models/flat_vase.obj");
 
-		auto flatVase = GameObject::createGameObject();
+		auto flatVase = GameObject::CreateGameObject();
 		flatVase.model = model;
 		flatVase.transform.translation = { -0.5f,0.5f,0.f };
 		flatVase.transform.scale = { 1.f,1.f,1.f };
-		gameObjects.emplace(flatVase.getId(), std::move(flatVase));
+		m_gameObjects.emplace(flatVase.getId(), std::move(flatVase));
 
-		model = Model::createModelFormFile(device, "models/smooth_vase.obj");
-		auto smoothVase = GameObject::createGameObject();
+		model = Model::CreateModelFormFile(m_device, "models/smooth_vase.obj");
+		auto smoothVase = GameObject::CreateGameObject();
 		smoothVase.model = model;
 		smoothVase.transform.translation = { 0.5f,.5f,0.f };
 		smoothVase.transform.scale = { 1.f,1.f,1.f };
-		gameObjects.emplace(smoothVase.getId(), std::move(smoothVase));
+		m_gameObjects.emplace(smoothVase.getId(), std::move(smoothVase));
 
-		model = Model::createModelFormFile(device, "models/quad.obj");
-		auto quad = GameObject::createGameObject();
+		model = Model::CreateModelFormFile(m_device, "models/quad.obj");
+		auto quad = GameObject::CreateGameObject();
 		quad.model = model;
 		quad.transform.translation = { 0.f,.5f,0.f };
 		quad.transform.scale = { 3.f,1.f,3.f };
-		gameObjects.emplace(quad.getId(), std::move(quad));
+		m_gameObjects.emplace(quad.getId(), std::move(quad));
 
 		std::vector<glm::vec3> lightColors{
 			  {1.f, .1f, .1f},
@@ -189,17 +189,16 @@ namespace Aura {
 			  {1.f, 1.f, 1.f}  //
 		};
 
-		model = createCubeModel(device, glm::vec3(1.f));
+		model = createCubeModel(m_device, glm::vec3(1.f));
 		for (int i = 0; i < lightColors.size(); i++) {
-			auto pointLight = GameObject::makePointLight(0.2f);
-			pointLight.model = model;
+			auto pointLight = GameObject::MakePointLight(0.2f);
 			pointLight.color = lightColors[i];
 			auto rotateLight = glm::rotate(
 				glm::mat4(1.f),
 				(i * glm::two_pi<float>()) / lightColors.size(),
 				{ 0.f, -1.f, 0.f });
 			pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-1.f, -1.f, -1.f, 1.f));
-			gameObjects.emplace(pointLight.getId(), std::move(pointLight));
+			m_gameObjects.emplace(pointLight.getId(), std::move(pointLight));
 		}
 		
 	}

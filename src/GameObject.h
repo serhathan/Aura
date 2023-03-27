@@ -24,7 +24,7 @@ namespace Aura {
 		using  id_t = unsigned int;
 		using Map = std::unordered_map<id_t, GameObject>;
 
-		static GameObject createGameObject() {
+		static GameObject CreateGameObject() {
 			static id_t current_id = 0;
 			return GameObject(current_id++);
 		}
@@ -36,7 +36,7 @@ namespace Aura {
 
 		id_t getId() const { return id; }
 
-		static GameObject makePointLight(float intensity = 10.f, float radius = 0.1f, glm::vec3 color = glm::vec3(1.f));
+		static GameObject MakePointLight(float intensity = 10.f, float radius = 0.1f, glm::vec3 color = glm::vec3(1.f));
 
 		std::shared_ptr<Model> model{};
 		std::unique_ptr<PointLightComponent> pointLight = nullptr;

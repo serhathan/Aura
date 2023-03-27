@@ -61,9 +61,9 @@ namespace Aura {
 			},
 		};
 	}
-	GameObject GameObject::makePointLight(float intensity, float radius, glm::vec3 color)
+	GameObject GameObject::MakePointLight(float intensity, float radius, glm::vec3 color)
 	{
-		GameObject gameObj = GameObject::createGameObject();
+		GameObject gameObj = GameObject::CreateGameObject();
 		gameObj.color = color;
 		gameObj.transform.scale.x = radius;
 		gameObj.pointLight = std::make_unique<PointLightComponent>();

@@ -44,7 +44,7 @@ namespace Aura {
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
 
-		void loadModel(const std::string& filePath);
+		void LoadModel(const std::string& filePath);
 	};
 
 	class Model
@@ -56,22 +56,22 @@ namespace Aura {
 		Model(const Model& c) = delete;
 		Model& operator=(const Model& c) = delete;
 
-		void bind(VkCommandBuffer commandBuffer);
-		void draw(VkCommandBuffer commandBuffer);
+		void Bind(VkCommandBuffer commandBuffer);
+		void Draw(VkCommandBuffer commandBuffer);
 
-		static std::unique_ptr<Model> createModelFormFile(Device& device, const std::string& filePath);
+		static std::unique_ptr<Model> CreateModelFormFile(Device& device, const std::string& filePath);
 
 	private:
-		void createVertexBuffer(const std::vector<Vertex>& vertices);
-		void createIndexBuffer(const std::vector<uint32_t>& indices);
+		void CreateVertexBuffer(const std::vector<Vertex>& vertices);
+		void CreateIndexBuffer(const std::vector<uint32_t>& indices);
 
-		Device& device;
+		Device& m_device;
 
-		std::unique_ptr<Buffer> vertexBuffer;
-		uint32_t vertexCount;
+		std::unique_ptr<Buffer> m_vertexBuffer;
+		uint32_t m_vertexCount;
 
-		bool hasIndexBuffer = false;
-		std::unique_ptr<Buffer> indexBuffer;
+		bool m_hasIndexBuffer = false;
+		std::unique_ptr<Buffer> m_indexBuffer;
 
 		uint32_t indexCount;
 	};

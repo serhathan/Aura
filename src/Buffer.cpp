@@ -10,7 +10,7 @@ namespace Aura {
 	 *
 	 * @return VkResult of the buffer mapping call
 	 */
-	VkDeviceSize Buffer::getAlignment(VkDeviceSize instanceSize, VkDeviceSize minOffsetAlignment) 
+	VkDeviceSize Buffer::GetAlignment(VkDeviceSize instanceSize, VkDeviceSize minOffsetAlignment)
 	{
 		if (minOffsetAlignment > 0) {
 			return (instanceSize + minOffsetAlignment - 1) & ~(minOffsetAlignment - 1);
@@ -18,19 +18,19 @@ namespace Aura {
 		return instanceSize;
 	}
 
-	Buffer::Buffer(Device& device,VkDeviceSize instanceSize,uint32_t instanceCount,
-		VkBufferUsageFlags usageFlags,VkMemoryPropertyFlags memoryPropertyFlags,VkDeviceSize minOffsetAlignment)
-		: device{ device },instanceSize{ instanceSize },instanceCount{ instanceCount },usageFlags{ usageFlags },memoryPropertyFlags{ memoryPropertyFlags } 
+	Buffer::Buffer(Device& device, VkDeviceSize instanceSize, uint32_t instanceCount,
+		VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize minOffsetAlignment)
+		: m_device{ device }, m_instanceSize{ instanceSize }, m_instanceCount{ instanceCount }, m_usageFlags{ usageFlags }, m_memoryPropertyFlags{ memoryPropertyFlags }
 	{
-		alignmentSize = getAlignment(instanceSize, minOffsetAlignment);
-		bufferSize = alignmentSize * instanceCount;
-		device.createBuffer(bufferSize, usageFlags, memoryPropertyFlags, buffer, memory);
+		m_alignmentSize = GetAlignment(instanceSize, minOffsetAlignment);
+		m_bufferSize = m_alignmentSize * instanceCount;
+		device.CreateBuffer(m_bufferSize, usageFlags, memoryPropertyFlags, m_buffer, m_memory);
 	}
 
 	Buffer::~Buffer() {
-		unmap();
-		vkDestroyBuffer(device.device(), buffer, nullptr);
-		vkFreeMemory(device.device(), memory, nullptr);
+		Unmap();
+		vkDestroyBuffer(m_device.GetDevice(), m_buffer, nullptr);
+		vkFreeMemory(m_device.GetDevice(), m_memory, nullptr);
 	}
 
 	/**
@@ -42,10 +42,10 @@ namespace Aura {
 	 *
 	 * @return VkResult of the buffer mapping call
 	 */
-	VkResult Buffer::map(VkDeviceSize size, VkDeviceSize offset) {
-		assert(buffer && memory && "Called map on buffer before create");
+	VkResult Buffer::Map(VkDeviceSize size, VkDeviceSize offset) {
+		assert(m_buffer && m_memory && "Called map on buffer before create");
 
-		return vkMapMemory(device.device(), memory, offset, size, 0, &mapped);
+		return vkMapMemory(m_device.GetDevice(), m_memory, offset, size, 0, &m_mapped);
 	}
 
 	/**
@@ -53,10 +53,10 @@ namespace Aura {
 	 *
 	 * @note Does not return a result as vkUnmapMemory can't fail
 	 */
-	void Buffer::unmap() {
-		if (mapped) {
-			vkUnmapMemory(device.device(), memory);
-			mapped = nullptr;
+	void Buffer::Unmap() {
+		if (m_mapped) {
+			vkUnmapMemory(m_device.GetDevice(), m_memory);
+			m_mapped = nullptr;
 		}
 	}
 
@@ -69,21 +69,21 @@ namespace Aura {
 	 * @param offset (Optional) Byte offset from beginning of mapped region
 	 *
 	 */
-	void Buffer::writeToBuffer(void* data, VkDeviceSize size, VkDeviceSize offset) {
-		assert(mapped && "Cannot copy to unmapped buffer");
+	void Buffer::WriteToBuffer(void* data, VkDeviceSize size, VkDeviceSize offset) {
+		assert(m_mapped && "Cannot copy to unmapped buffer");
 
 		if (size == VK_WHOLE_SIZE) {
-			memcpy(mapped, data, bufferSize);
+			memcpy(m_mapped, data, m_bufferSize);
 		}
 		else {
-			char* memOffset = (char*)mapped;
+			char* memOffset = (char*)m_mapped;
 			memOffset += offset;
 			memcpy(memOffset, data, size);
 		}
 	}
 
 	/**
-	 * Flush a memory range of the buffer to make it visible to the device
+	 * Flush a memory range of the buffer to make it visible to the m_device
 	 *
 	 * @note Only required for non-coherent memory
 	 *
@@ -93,13 +93,13 @@ namespace Aura {
 	 *
 	 * @return VkResult of the flush call
 	 */
-	VkResult Buffer::flush(VkDeviceSize size, VkDeviceSize offset) {
+	VkResult Buffer::Flush(VkDeviceSize size, VkDeviceSize offset) {
 		VkMappedMemoryRange mappedRange = {};
 		mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-		mappedRange.memory = memory;
+		mappedRange.memory = m_memory;
 		mappedRange.offset = offset;
 		mappedRange.size = size;
-		return vkFlushMappedMemoryRanges(device.device(), 1, &mappedRange);
+		return vkFlushMappedMemoryRanges(m_device.GetDevice(), 1, &mappedRange);
 	}
 
 	/**
@@ -107,19 +107,19 @@ namespace Aura {
 	 *
 	 * @note Only required for non-coherent memory
 	 *
-	 * @param size (Optional) Size of the memory range to invalidate. Pass VK_WHOLE_SIZE to invalidate
+	 * @param size (Optional) Size of the memory range to Invalidate. Pass VK_WHOLE_SIZE to Invalidate
 	 * the complete buffer range.
 	 * @param offset (Optional) Byte offset from beginning
 	 *
-	 * @return VkResult of the invalidate call
+	 * @return VkResult of the Invalidate call
 	 */
-	VkResult Buffer::invalidate(VkDeviceSize size, VkDeviceSize offset) {
+	VkResult Buffer::Invalidate(VkDeviceSize size, VkDeviceSize offset) {
 		VkMappedMemoryRange mappedRange = {};
 		mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-		mappedRange.memory = memory;
+		mappedRange.memory = m_memory;
 		mappedRange.offset = offset;
 		mappedRange.size = size;
-		return vkInvalidateMappedMemoryRanges(device.device(), 1, &mappedRange);
+		return vkInvalidateMappedMemoryRanges(m_device.GetDevice(), 1, &mappedRange);
 	}
 
 	/**
@@ -130,8 +130,8 @@ namespace Aura {
 	 *
 	 * @return VkDescriptorBufferInfo of specified offset and range
 	 */
-	VkDescriptorBufferInfo Buffer::descriptorInfo(VkDeviceSize size, VkDeviceSize offset) {
-		return VkDescriptorBufferInfo{buffer,offset,size};
+	VkDescriptorBufferInfo Buffer::DescriptorInfo(VkDeviceSize size, VkDeviceSize offset) {
+		return VkDescriptorBufferInfo{ m_buffer,offset,size };
 	}
 
 	/**
@@ -141,17 +141,17 @@ namespace Aura {
 	 * @param index Used in offset calculation
 	 *
 	 */
-	void Buffer::writeToIndex(void* data, int index) {
-		writeToBuffer(data, instanceSize, index * alignmentSize);
+	void Buffer::WriteToIndex(void* data, int index) {
+		WriteToBuffer(data, m_instanceSize, index * m_alignmentSize);
 	}
 
 	/**
-	 *  Flush the memory range at index * alignmentSize of the buffer to make it visible to the device
+	 *  Flush the memory range at index * alignmentSize of the buffer to make it visible to the m_device
 	 *
 	 * @param index Used in offset calculation
 	 *
 	 */
-	VkResult Buffer::flushIndex(int index) { return flush(alignmentSize, index * alignmentSize); }
+	VkResult Buffer::FlushIndex(int index) { return Flush(m_alignmentSize, index * m_alignmentSize); }
 
 	/**
 	 * Create a buffer info descriptor
@@ -160,8 +160,8 @@ namespace Aura {
 	 *
 	 * @return VkDescriptorBufferInfo for instance at index
 	 */
-	VkDescriptorBufferInfo Buffer::descriptorInfoForIndex(int index) {
-		return descriptorInfo(alignmentSize, index * alignmentSize);
+	VkDescriptorBufferInfo Buffer::DescriptorInfoForIndex(int index) {
+		return DescriptorInfo(m_alignmentSize, index * m_alignmentSize);
 	}
 
 	/**
@@ -169,11 +169,11 @@ namespace Aura {
 	 *
 	 * @note Only required for non-coherent memory
 	 *
-	 * @param index Specifies the region to invalidate: index * alignmentSize
+	 * @param index Specifies the region to Invalidate: index * alignmentSize
 	 *
-	 * @return VkResult of the invalidate call
+	 * @return VkResult of the Invalidate call
 	 */
-	VkResult Buffer::invalidateIndex(int index) {
-		return invalidate(alignmentSize, index * alignmentSize);
+	VkResult Buffer::InvalidateIndex(int index) {
+		return Invalidate(m_alignmentSize, index * m_alignmentSize);
 	}
 }  // namespace lve

@@ -19,88 +19,88 @@ namespace std {
 }
 
 namespace Aura {
-	Model::Model(Device& device, const Builder& builder) : device(device)
+	Model::Model(Device& device, const Builder& builder) : m_device(device)
 	{
-		createVertexBuffer(builder.vertices);
-		createIndexBuffer(builder.indices);
+		CreateVertexBuffer(builder.vertices);
+		CreateIndexBuffer(builder.indices);
 	}
 	Model::~Model()
 	{
 	}
-	void Model::bind(VkCommandBuffer commandBuffer)
+	void Model::Bind(VkCommandBuffer commandBuffer)
 	{
-		VkBuffer buffers[] = { vertexBuffer->getBuffer() };
+		VkBuffer buffers[] = { m_vertexBuffer->GetBuffer() };
 
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offsets);
-		if (hasIndexBuffer)
-			vkCmdBindIndexBuffer(commandBuffer, indexBuffer->getBuffer(), 0, VK_INDEX_TYPE_UINT32);
+		if (m_hasIndexBuffer)
+			vkCmdBindIndexBuffer(commandBuffer, m_indexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
 	}
-	void Model::draw(VkCommandBuffer commandBuffer)
+	void Model::Draw(VkCommandBuffer commandBuffer)
 	{
-		if (hasIndexBuffer)
+		if (m_hasIndexBuffer)
 		{
 			vkCmdDrawIndexed(commandBuffer, indexCount, 1, 0, 0, 0);
 		}
 		else
 		{
-			vkCmdDraw(commandBuffer, vertexCount, 1, 0, 0);
+			vkCmdDraw(commandBuffer, m_vertexCount, 1, 0, 0);
 		}
 	}
-	std::unique_ptr<Model> Model::createModelFormFile(Device& device, const std::string& filePath)
+	std::unique_ptr<Model> Model::CreateModelFormFile(Device& device, const std::string& filePath)
 	{
 		Builder builder{};
-		builder.loadModel(filePath);
+		builder.LoadModel(filePath);
 
 		std::cout << "Vertex Count: " << builder.vertices.size() << "\n";
 
 		return std::make_unique<Model>(device, builder);
 	}
-	void Model::createVertexBuffer(const std::vector<Vertex>& vertices)
+	void Model::CreateVertexBuffer(const std::vector<Vertex>& vertices)
 	{
-		vertexCount = static_cast<uint32_t>(vertices.size());
-		assert(vertexCount >= 3 && "Vertex Count Must Be At Least 3");
-		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
+		m_vertexCount = static_cast<uint32_t>(vertices.size());
+		assert(m_vertexCount >= 3 && "Vertex Count Must Be At Least 3");
+		VkDeviceSize bufferSize = sizeof(vertices[0]) * m_vertexCount;
 		uint32_t vertexSize = sizeof(vertices[0]);
 
-		Buffer stageBuffer(device,vertexSize,vertexCount, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		Buffer stageBuffer(m_device,vertexSize,m_vertexCount, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-		stageBuffer.map();
-		stageBuffer.writeToBuffer((void*)vertices.data());
+		stageBuffer.Map();
+		stageBuffer.WriteToBuffer((void*)vertices.data());
 
-		vertexBuffer = std::make_unique<Buffer>(device,vertexSize,vertexCount, 
+		m_vertexBuffer = std::make_unique<Buffer>(m_device,vertexSize,m_vertexCount, 
 			VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
 
-		device.copyBuffer(stageBuffer.getBuffer(), vertexBuffer->getBuffer(), bufferSize);
+		m_device.CopyBuffer(stageBuffer.GetBuffer(), m_vertexBuffer->GetBuffer(), bufferSize);
 
 	}
-	void Model::createIndexBuffer(const std::vector<uint32_t>& indices)
+	void Model::CreateIndexBuffer(const std::vector<uint32_t>& indices)
 	{
 		indexCount = static_cast<uint32_t>(indices.size());
-		hasIndexBuffer = indexCount > 0;
+		m_hasIndexBuffer = indexCount > 0;
 
-		if (!hasIndexBuffer)
+		if (!m_hasIndexBuffer)
 			return;
 
 		VkDeviceSize bufferSize = sizeof(indices[0]) * indexCount;
 		uint32_t indexSize = sizeof(indices[0]);
 
-		Buffer stageBuffer(device,indexSize,indexCount, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+		Buffer stageBuffer(m_device,indexSize,indexCount, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-		stageBuffer.map();
-		stageBuffer.writeToBuffer((void*)indices.data());
+		stageBuffer.Map();
+		stageBuffer.WriteToBuffer((void*)indices.data());
 
-		indexBuffer = std::make_unique<Buffer>(device, indexSize, indexCount, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+		m_indexBuffer = std::make_unique<Buffer>(m_device, indexSize, indexCount, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-		device.copyBuffer(stageBuffer.getBuffer(), indexBuffer->getBuffer(), bufferSize);
+		m_device.CopyBuffer(stageBuffer.GetBuffer(), m_indexBuffer->GetBuffer(), bufferSize);
 
 
 	}
 
-	void Builder::loadModel(const std::string& filePath) {
+	void Builder::LoadModel(const std::string& filePath) {
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;

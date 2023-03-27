@@ -3,18 +3,18 @@
 #include "Model.h"
 namespace Aura {
 	Pipeline::Pipeline(Device& device, const std::string& vertexPath, const std::string& fragmentPath, const PipelineConfigInfo& configInfo)
-		: device{ device }
+		: m_device{ device }
 	{
-		createGraphicsPipeline(vertexPath,fragmentPath, configInfo);
+		CreateGraphicsPipeline(vertexPath,fragmentPath, configInfo);
 	}
 	Pipeline::~Pipeline()
 	{
-		vkDestroyShaderModule(device.device(),vertShaderModule,nullptr);
-		vkDestroyShaderModule(device.device(), fragShaderModule, nullptr);
-		vkDestroyPipeline(device.device(),graphicsPipeline,nullptr);
+		vkDestroyShaderModule(m_device.GetDevice(),m_vertShaderModule,nullptr);
+		vkDestroyShaderModule(m_device.GetDevice(), m_fragShaderModule, nullptr);
+		vkDestroyPipeline(m_device.GetDevice(),m_graphicsPipeline,nullptr);
 	}
 	
-	std::vector<char> Pipeline::readFile(const std::string& filePath)
+	std::vector<char> Pipeline::ReadFile(const std::string& filePath)
 	{
 		std::ifstream file{ filePath, std::ios::ate | std::ios::binary };
 
@@ -33,21 +33,21 @@ namespace Aura {
 
 
 	}
-	void Pipeline::createGraphicsPipeline(const std::string& vertexPath, const std::string& fragmentPath, const PipelineConfigInfo& configInfo)
+	void Pipeline::CreateGraphicsPipeline(const std::string& vertexPath, const std::string& fragmentPath, const PipelineConfigInfo& configInfo)
 	{
 		assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
 		assert(configInfo.m_renderPass != VK_NULL_HANDLE && "Cannot create graphics pipeline: no renderPass provided in configInfo");
 
-		auto vertShaderCode = readFile(vertexPath);
-		auto fragShaderCode = readFile(fragmentPath);
+		auto vertShaderCode = ReadFile(vertexPath);
+		auto fragShaderCode = ReadFile(fragmentPath);
 
-		createShaderModule(vertShaderCode,&vertShaderModule);
-		createShaderModule(fragShaderCode, &fragShaderModule);
+		CreateShaderModule(vertShaderCode,&m_vertShaderModule);
+		CreateShaderModule(fragShaderCode, &m_fragShaderModule);
 
 		VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
 		vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-		vertShaderStageInfo.module = vertShaderModule;
+		vertShaderStageInfo.module = m_vertShaderModule;
 		vertShaderStageInfo.pName = "main";
 		vertShaderStageInfo.pNext = nullptr;
 		vertShaderStageInfo.pSpecializationInfo = nullptr;
@@ -55,7 +55,7 @@ namespace Aura {
 		VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
 		fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-		fragShaderStageInfo.module = fragShaderModule;
+		fragShaderStageInfo.module = m_fragShaderModule;
 		fragShaderStageInfo.pName = "main";
 		fragShaderStageInfo.pNext = nullptr;
 		fragShaderStageInfo.pSpecializationInfo = nullptr;
@@ -94,29 +94,29 @@ namespace Aura {
 		pipelineInfo.basePipelineIndex = -1;
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-		if (vkCreateGraphicsPipelines(device.device(),VK_NULL_HANDLE,1,&pipelineInfo,nullptr, &graphicsPipeline) != VK_SUCCESS)
+		if (vkCreateGraphicsPipelines(m_device.GetDevice(),VK_NULL_HANDLE,1,&pipelineInfo,nullptr, &m_graphicsPipeline) != VK_SUCCESS)
 		{
 			throw std::runtime_error("failed to create graphics pipeline");
 		}
 	}
-	void Pipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule)
+	void Pipeline::CreateShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule)
 	{
 		VkShaderModuleCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		createInfo.codeSize = code.size();
 		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
-		if (vkCreateShaderModule(device.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS) {
+		if (vkCreateShaderModule(m_device.GetDevice(), &createInfo, nullptr, shaderModule) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create shader module");
 		}
 	}
 
-	void Pipeline::bind(VkCommandBuffer commandBuffer)
+	void Pipeline::Bind(VkCommandBuffer commandBuffer)
 	{
-		vkCmdBindPipeline(commandBuffer,VK_PIPELINE_BIND_POINT_GRAPHICS,graphicsPipeline);
+		vkCmdBindPipeline(commandBuffer,VK_PIPELINE_BIND_POINT_GRAPHICS,m_graphicsPipeline);
 	}
 
-	void Pipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo)
+	void Pipeline::DefaultPipelineConfigInfo(PipelineConfigInfo& configInfo)
 	{
 		
 		configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;

@@ -14,38 +14,38 @@ namespace Aura {
 		Renderer(const Renderer& c) = delete;
 		Renderer& operator=(const Renderer& c) = delete;
 
-		VkCommandBuffer beginFrame();
-		void endFrame();
-		void beginSwapChainRenderPass(VkCommandBuffer commandBuffer);
-		void endSwapChainRenderPass(VkCommandBuffer commandBuffer);
+		VkCommandBuffer BeginFrame();
+		void EndFrame();
+		void BeginSwapChainRenderPass(VkCommandBuffer commandBuffer);
+		void EndSwapChainRenderPass(VkCommandBuffer commandBuffer);
 
-		bool isFrameInProgress() const { return isFrameStarted; }
-		VkRenderPass getSwapChainRenderPass() const { return swapChain->GetRenderPass(); }
+		bool IsFrameInProgress() const { return m_isFrameStarted; }
+		VkRenderPass GetSwapChainRenderPass() const { return m_swapChain->GetRenderPass(); }
 
-		VkCommandBuffer getCurrentCommandBuffer() const
+		VkCommandBuffer GetCurrentCommandBuffer() const
 		{
-			assert(isFrameStarted && "Cannot get command buffer when frame not in progress!");
-			return commandBuffers[currentFrameIndex];
+			assert(m_isFrameStarted && "Cannot get command buffer when frame not in progress!");
+			return m_commandBuffers[m_currentFrameIndex];
 		}
 
-		int getFrameIndex() const {
-			assert(isFrameStarted && "Cannot get frame index when frame not in progress");
-			return currentFrameIndex;
+		int GetFrameIndex() const {
+			assert(m_isFrameStarted && "Cannot get frame index when frame not in progress");
+			return m_currentFrameIndex;
 		}
-		float getAspectRation() const { return swapChain->GetExtentAspectRatio(); }
+		float GetAspectRatio() const { return m_swapChain->GetExtentAspectRatio(); }
 	private:
-		void createCommandBuffers();
-		void freeComandBuffers();
-		void recreateSwapChain();
+		void CreateCommandBuffers();
+		void FreeComandBuffers();
+		void RecreateSwapChain();
 
 		Window& m_window;
-		Device& device;
-		std::unique_ptr<SwapChain> swapChain;
-		std::vector<VkCommandBuffer> commandBuffers;
+		Device& m_device;
+		std::unique_ptr<SwapChain> m_swapChain;
+		std::vector<VkCommandBuffer> m_commandBuffers;
 
-		uint32_t currentImageIndex;
-		int currentFrameIndex{ 0 };
-		bool isFrameStarted {false};
+		uint32_t m_currentImageIndex;
+		int m_currentFrameIndex{ 0 };
+		bool m_isFrameStarted {false};
 	};
 }
 

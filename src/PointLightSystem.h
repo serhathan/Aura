@@ -7,26 +7,23 @@
 #include <SimpleRenderSystem.h>
 
 namespace Aura {
-
-
 	class PointLightSystem
 	{
 	public:
-		PointLightSystem(Device &device,VkRenderPass m_renderPass, VkDescriptorSetLayout globalSetLayout);
+		PointLightSystem(Device& device, VkRenderPass m_renderPass, VkDescriptorSetLayout globalSetLayout);
 		~PointLightSystem();
 
 		PointLightSystem(const PointLightSystem& c) = delete;
 		PointLightSystem& operator=(const PointLightSystem& c) = delete;
-		void render(FrameInfo& frameInfo);
+		void Render(FrameInfo& frameInfo);
 
-		void update(FrameInfo& frameInfo, GlobalUBO& ubo);
+		void Update(FrameInfo& frameInfo, GlobalUBO& ubo);
 	private:
-		void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
-		void createPipeline(VkRenderPass m_renderPass);
+		void CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout);
+		void CreatePipeline(VkRenderPass m_renderPass);
 
-		Device &device;
-		std::unique_ptr<Pipeline> pipeline;
-		VkPipelineLayout pipelineLayout;
+		Device& m_device;
+		std::unique_ptr<Pipeline> m_pipeline;
+		VkPipelineLayout m_pipelineLayout;
 	};
 }
-

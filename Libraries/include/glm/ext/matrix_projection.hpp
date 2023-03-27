@@ -35,7 +35,7 @@ namespace glm
 	/// @{
 
 	/// Map the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @param obj Specify the object coordinates.
 	/// @param model Specifies the current modelview matrix
@@ -51,7 +51,7 @@ namespace glm
 		vec<3, T, Q> const& obj, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport);
 
 	/// Map the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param obj Specify the object coordinates.
 	/// @param model Specifies the current modelview matrix
@@ -83,7 +83,7 @@ namespace glm
 		vec<3, T, Q> const& obj, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport);
 
 	/// Map the specified window coordinates (win.x, win.y, win.z) into object coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @param win Specify the window coordinates to be mapped.
 	/// @param model Specifies the modelview matrix
@@ -99,7 +99,7 @@ namespace glm
 		vec<3, T, Q> const& win, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport);
 
 	/// Map the specified window coordinates (win.x, win.y, win.z) into object coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param win Specify the window coordinates to be mapped.
 	/// @param model Specifies the modelview matrix

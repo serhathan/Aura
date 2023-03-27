@@ -24,13 +24,12 @@ namespace Aura {
 
 	private:
 		void loadGameObjects();
-		void renderGameObjects(VkCommandBuffer commandBuffer);
 
 		Window m_window {"Aura",WITDH,HEIGHT};
-		Device device {m_window};
-		Renderer renderer {m_window,device};
-		std::unique_ptr<DescriptorPool> globalPool;
-		GameObject::Map gameObjects;
+		Device m_device {m_window};
+		Renderer m_renderer{m_window,m_device};
+		std::unique_ptr<DescriptorPool> m_globalPool;
+		GameObject::Map m_gameObjects;
 	};
 }
 

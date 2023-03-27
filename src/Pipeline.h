@@ -35,18 +35,18 @@ namespace Aura {
 		Pipeline(const Pipeline& c) = delete;
 		Pipeline& operator=(const Pipeline& c) = delete;
 
-		void bind(VkCommandBuffer commandBuffer);
-		static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
+		void Bind(VkCommandBuffer commandBuffer);
+		static void DefaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
 
 	private:
-		static std::vector<char> readFile(const std::string& filePath);
-		void createGraphicsPipeline(const std::string& vertexPath, const std::string& fragmentPath, const PipelineConfigInfo& configInfo);
-		void createShaderModule(const std::vector<char>& code, VkShaderModule *shaderModule);
+		static std::vector<char> ReadFile(const std::string& filePath);
+		void CreateGraphicsPipeline(const std::string& vertexPath, const std::string& fragmentPath, const PipelineConfigInfo& configInfo);
+		void CreateShaderModule(const std::vector<char>& code, VkShaderModule *shaderModule);
 
-		Device& device;
-		VkPipeline graphicsPipeline;
-		VkShaderModule vertShaderModule;
-		VkShaderModule fragShaderModule;
+		Device& m_device;
+		VkPipeline m_graphicsPipeline;
+		VkShaderModule m_vertShaderModule;
+		VkShaderModule m_fragShaderModule;
 
 	};
 }
