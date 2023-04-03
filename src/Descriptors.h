@@ -55,6 +55,8 @@ namespace Aura {
 		DescriptorPool(const DescriptorPool&) = delete;
 		DescriptorPool& operator=(const DescriptorPool&) = delete;
 
+		VkDescriptorPool GetDescriptorPool() const { return m_descriptorPool; }
+
 		bool AllocateDescriptor(const VkDescriptorSetLayout descriptorSetLayout, VkDescriptorSet& descriptor) const;
 
 		void FreeDescriptors(std::vector<VkDescriptorSet>& descriptors) const;

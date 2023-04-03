@@ -19,6 +19,8 @@ namespace Aura {
         VkFramebuffer GetFrameBuffer(int index) { return m_swapChainFramebuffers[index]; }
         VkRenderPass GetRenderPass() { return m_renderPass; }
         VkImageView GetImageView(int index) { return m_swapChainImageViews[index]; }
+        std::vector<VkImageView> GetImageViews() const  { return m_swapChainImageViews; }
+
         size_t GetImageCount() { return m_swapChainImages.size(); }
         VkFormat GetSwapChainImageFormat() { return m_swapChainImageFormat; }
         VkExtent2D GetSwapChainExtent() { return m_swapChainExtent; }

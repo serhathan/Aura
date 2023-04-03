@@ -9,11 +9,12 @@ namespace Aura {
 	};
 
 	struct QueueFamilyIndices {
-		uint32_t graphicsFamily;
-		uint32_t presentFamily;
-		bool graphicsFamilyHasValue = false;
-		bool presentFamilyHasValue = false;
-		bool IsComplete() { return graphicsFamilyHasValue && presentFamilyHasValue; }
+		std::optional<uint32_t> graphicsFamily;
+		std::optional<uint32_t> presentFamily;
+
+		bool IsComplete() {
+			return graphicsFamily.has_value() && presentFamily.has_value();
+		}
 	};
 
 	class Device
@@ -35,6 +36,9 @@ namespace Aura {
 
 		VkCommandPool GetCommandPool() { return m_commandPool; }
 		VkDevice GetDevice() { return m_device; }
+		VkInstance GetInstance() { return m_instance; }
+		VkPhysicalDevice GetPhysicalDevice() { return m_physicalDevice; }
+
 		VkSurfaceKHR GetSurface() { return m_surface; }
 		VkQueue GetGraphicsQueue() { return m_graphicsQueue; }
 		VkQueue GetPresentQueue() { return m_presentQueue; }
@@ -47,6 +51,7 @@ namespace Aura {
 		void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
 
 		VkCommandBuffer BeginSingleTimeCommands();
+		VkCommandBuffer BeginSingleTimeCommands(const VkCommandPool& cmdPool);
 		void EndSingleTimeCommands(VkCommandBuffer commandBuffer);
 		void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 		void CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);

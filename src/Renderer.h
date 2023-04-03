@@ -33,6 +33,12 @@ namespace Aura {
 			return m_currentFrameIndex;
 		}
 		float GetAspectRatio() const { return m_swapChain->GetExtentAspectRatio(); }
+
+		// Refactor it later
+		VkFormat GetSwapChainImageFormat() const { return m_swapChain->GetSwapChainImageFormat(); }
+		size_t GetSwapChainImageCount() { return m_swapChain->GetImageCount(); }
+		std::vector<VkImageView> GetSwapChainImageViews() const { return m_swapChain->GetImageViews(); }
+		VkExtent2D GetSwapChainExtent2D() const { return m_swapChain->GetSwapChainExtent(); }
 	private:
 		void CreateCommandBuffers();
 		void FreeComandBuffers();

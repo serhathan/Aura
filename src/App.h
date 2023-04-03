@@ -6,6 +6,7 @@
 #include "Renderer.h"
 #include "Descriptors.h"
 #include "FrameInfo.h"
+#include <UI.h>
 namespace Aura {
 
 	class App
@@ -24,12 +25,18 @@ namespace Aura {
 
 	private:
 		void loadGameObjects();
+		//void InitGUI();
 
+
+	private:
 		Window m_window {"Aura",WITDH,HEIGHT};
 		Device m_device {m_window};
 		Renderer m_renderer{m_window,m_device};
 		std::unique_ptr<DescriptorPool> m_globalPool;
 		GameObject::Map m_gameObjects;
+		UI m_ui{ m_window.getGLFWwindow(),m_device.GetInstance(),m_device.GetPhysicalDevice(),m_device.GetDevice(),
+			m_device.FindPhysicalQueueFamilies().graphicsFamily.value(),m_device.GetGraphicsQueue(),m_renderer.GetSwapChainRenderPass(),0 };
+
 	};
 }
 
