@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "GLFW\glfw3.h"
+#include "SwapChain.h"
 namespace Aura {
     class UI
     {
@@ -16,10 +17,14 @@ namespace Aura {
 
         VkCommandBuffer beginSingleTimeCommands(VkDevice device, VkCommandPool commandPool);
         void endSingleTimeCommands(VkDevice device, VkCommandPool commandPool, VkQueue graphicsQueue, VkCommandBuffer commandBuffer);
+        void CreateRenderPass(VkDevice device);
 
+        std::vector<VkFramebuffer> m_swapChainFramebuffers;
+
+        VkRenderPass m_imguiRenderPass;
         VkDescriptorPool descriptorPool;
-        uint32_t minImageCount = 2;
-        uint32_t imageCount = 2;
+        uint32_t minImageCount = SwapChain::MAX_FRAMES_IN_FLIGHT;
+        uint32_t imageCount = SwapChain::MAX_FRAMES_IN_FLIGHT;
         VkCommandPool commandPool;
     };
 

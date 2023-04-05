@@ -198,6 +198,8 @@ namespace Aura {
 	}
 
 	void SwapChain::CreateRenderPass() {
+
+
 		VkAttachmentDescription depthAttachment{};
 		depthAttachment.format = FindDepthFormat();
 		depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
