@@ -7,7 +7,8 @@ namespace Aura {
 		uint32_t binding,
 		VkDescriptorType descriptorType,
 		VkShaderStageFlags stageFlags,
-		uint32_t count) {
+		uint32_t count)
+	{
 		assert(m_bindings.count(binding) == 0 && "Binding already in use");
 		VkDescriptorSetLayoutBinding layoutBinding{};
 		layoutBinding.binding = binding;
@@ -24,8 +25,7 @@ namespace Aura {
 
 	// *************** Descriptor Set Layout *********************
 
-	DescriptorSetLayout::DescriptorSetLayout(
-		Device& device, std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings)
+	DescriptorSetLayout::DescriptorSetLayout(Device& device, std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings)
 		: m_device{ device }, m_bindings{ bindings } {
 		std::vector<VkDescriptorSetLayoutBinding> setLayoutBindings{};
 		for (auto kv : bindings) {

@@ -78,7 +78,7 @@ namespace Aura {
 
 		VkRenderPassBeginInfo renderPassInfo{};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		renderPassInfo.m_renderPass = m_swapChain->GetRenderPass();
+		renderPassInfo.renderPass = m_swapChain->GetRenderPass();
 		renderPassInfo.framebuffer = m_swapChain->GetFrameBuffer(m_currentImageIndex);
 
 		renderPassInfo.renderArea.offset = { 0,0 };

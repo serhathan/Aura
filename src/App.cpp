@@ -12,23 +12,21 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_vulkan.h"
+#include <Texture.h>
+#include <TextureSubSystem.h>
 
 namespace Aura {
-
 	App::App()
 	{
 		DescriptorPool::Builder builder(m_device);
 
 		builder.SetMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
 		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SwapChain::MAX_FRAMES_IN_FLIGHT);
-
 		m_globalPool = builder.Build();
 
 		loadGameObjects();
 
 		//InitGUI();
-
-
 	}
 	App::~App()
 	{
@@ -37,6 +35,7 @@ namespace Aura {
 
 	void App::Run()
 	{
+		
 		std::vector<std::unique_ptr<Buffer>> uboBuffers(SwapChain::MAX_FRAMES_IN_FLIGHT);
 		for (int i = 0; i < uboBuffers.size(); i++) {
 			uboBuffers[i] = std::make_unique<Buffer>(m_device, sizeof(GlobalUBO), 1, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
@@ -54,9 +53,14 @@ namespace Aura {
 			auto bufferInfo = uboBuffers[i]->DescriptorInfo();
 			DescriptorWriter(*globalSetLayout, *m_globalPool).writeBuffer(0, &bufferInfo).Build(globalDescriptorSets[i]);
 		}
+		
+
+	
+
 
 		SimpleRenderSystem simpleRenderSystem(m_device, m_renderer.GetSwapChainRenderPass(), globalSetLayout->GetDescriptorSetLayout());
 		PointLightSystem pointLight(m_device, m_renderer.GetSwapChainRenderPass(), globalSetLayout->GetDescriptorSetLayout());
+		//TextureSubSystem textureSubSystem(m_device, m_renderer.GetSwapChainRenderPass(), globalSetLayout->GetDescriptorSetLayout());
 
 		Camera camera{};
 		//camera.setViewTarget(glm::vec3(0.f,0.f,0.f),glm::vec3(0.0f,0.2f,1.f));
@@ -75,7 +79,6 @@ namespace Aura {
 			ImGuiIO& io = ImGui::GetIO();
 			ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-
 			auto newTime = std::chrono::high_resolution_clock::now();
 			float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
 			currentTime = newTime;
@@ -89,28 +92,28 @@ namespace Aura {
 
 			if (auto commandBuffer = m_renderer.BeginFrame())
 			{
-
 				int frameIndex = m_renderer.GetFrameIndex();
 
 				FrameInfo frameInfo = { frameIndex,frameTime,commandBuffer,camera,globalDescriptorSets[frameIndex],m_gameObjects };
 
 				//update
 				GlobalUBO ubo{};
-
+				//UniformBufferObject ubo{};
 				ubo.projection = camera.GetProjection();
 				ubo.view = camera.GetView();
 
 				pointLight.Update(frameInfo, ubo);
+				//textureSubSystem.Update(frameInfo, ubo);
 
 				uboBuffers[frameIndex]->WriteToBuffer(&ubo);
 				uboBuffers[frameIndex]->Flush();
 				// render
 				m_renderer.BeginSwapChainRenderPass(commandBuffer);
-
 				simpleRenderSystem.RenderGameObjects(frameInfo);
 				pointLight.Render(frameInfo);
+				//textureSubSystem.RenderGameObjects(frameInfo);
 
-				m_ui.beginFrame();
+				/*m_ui.beginFrame();
 
 				// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
 				{
@@ -119,7 +122,7 @@ namespace Aura {
 
 					ImGui::Begin("Merhaba Dünya!");                          // Create a window called "Hello, world!" and append into it.
 
-					ImGui::Text("Merhaba Hocam.");        
+					ImGui::Text("Merhaba Hocam.");
 
 					ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 					ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
@@ -134,6 +137,7 @@ namespace Aura {
 				}
 
 				m_ui.endFrame(commandBuffer);
+				*/
 
 				m_renderer.EndSwapChainRenderPass(commandBuffer);
 				m_renderer.EndFrame();
@@ -141,9 +145,6 @@ namespace Aura {
 		}
 
 		vkDeviceWaitIdle(m_device.GetDevice());
-
-
-
 	}
 
 	std::unique_ptr<Model> createCubeModel(Device& device, glm::vec3 offset)
@@ -199,7 +200,7 @@ namespace Aura {
 	void App::loadGameObjects()
 	{
 		std::shared_ptr<Model> model = Model::CreateModelFormFile(m_device, "models/flat_vase.obj");
-
+		
 		auto flatVase = GameObject::CreateGameObject();
 		flatVase.model = model;
 		flatVase.transform.translation = { -0.5f,0.5f,0.f };
@@ -226,6 +227,7 @@ namespace Aura {
 		cube.transform.translation = { 0.2f,.2f,0.f };
 		cube.transform.scale = { 0.1f,0.1f,0.1f };
 		m_gameObjects.emplace(cube.getId(), std::move(cube));
+		
 
 		std::vector<glm::vec3> lightColors{
 			  {1.f, .1f, .1f},
@@ -246,6 +248,7 @@ namespace Aura {
 			pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-1.f, -1.f, -1.f, 1.f));
 			m_gameObjects.emplace(pointLight.getId(), std::move(pointLight));
 		}
+		
 	}
 
 	/*void App::InitGUI()
@@ -268,7 +271,6 @@ namespace Aura {
 		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000);
 
 		imguiPool = builder.Build();
-
 
 		auto queueFamilyIndices = m_device.FindPhysicalQueueFamilies();
 
@@ -300,7 +302,6 @@ namespace Aura {
 		init_info.Allocator = nullptr;
 		init_info.CheckVkResultFn = nullptr;
 		ImGui_ImplVulkan_Init(&init_info, m_renderer.GetSwapChainRenderPass());
-		
 
 		// Upload Fonts
 		{
@@ -311,4 +312,5 @@ namespace Aura {
 		}
 	}
 	*/
+	
 }

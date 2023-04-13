@@ -11,10 +11,10 @@ namespace Aura {
 		glm::mat4 normalMatrix{ 1.f };
 	};
 
-	SimpleRenderSystem::SimpleRenderSystem(Device& m_device, VkRenderPass m_renderPass, VkDescriptorSetLayout globalSetLayout) : m_device(m_device)
+	SimpleRenderSystem::SimpleRenderSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout) : m_device(device)
 	{
 		CreatePipelineLayout(globalSetLayout);
-		CreatePipeline(m_renderPass);
+		CreatePipeline(renderPass);
 	}
 	SimpleRenderSystem::~SimpleRenderSystem()
 	{
@@ -43,13 +43,13 @@ namespace Aura {
 		}
 	}
 
-	void SimpleRenderSystem::CreatePipeline(VkRenderPass m_renderPass)
+	void SimpleRenderSystem::CreatePipeline(VkRenderPass renderPass)
 	{
 		assert(m_pipelineLayout != nullptr && "Cannot create pipeline before pipeline layout");
 		PipelineConfigInfo pipelineConfig{};
 		Pipeline::DefaultPipelineConfigInfo(pipelineConfig);
 
-		pipelineConfig.m_renderPass = m_renderPass;
+		pipelineConfig.renderPass = renderPass;
 		pipelineConfig.pipelineLayout = m_pipelineLayout;
 		m_pipeline = std::make_unique<Pipeline>(m_device, "shaders/simpleShader.vert.spv", "shaders/simpleShader.frag.spv", pipelineConfig);
 	}

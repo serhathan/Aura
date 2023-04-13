@@ -53,7 +53,7 @@ namespace Aura {
 		pipelineConfig.attributeDesc.clear();
 		pipelineConfig.bindingDesc.clear();
 
-		pipelineConfig.m_renderPass = m_renderPass;
+		pipelineConfig.renderPass = m_renderPass;
 		pipelineConfig.pipelineLayout = m_pipelineLayout;
 		m_pipeline = std::make_unique<Pipeline>(m_device, "shaders/pointLight.vert.spv", "shaders/pointLight.frag.spv", pipelineConfig);
 	}

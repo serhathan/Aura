@@ -89,7 +89,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)Libraries\include;$(SolutionDir)Libraries\include\GLFW\include;$(SolutionDir)Libraries\include\tinyobjloader;$(SolutionDir)Libraries\include\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)Libraries\include;$(SolutionDir)Libraries\include\GLFW\include;$(SolutionDir)Libraries\include\tinyobjloader;$(SolutionDir)Libraries\include\imgui;$(SolutionDir)Libraries\include\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -112,7 +112,10 @@
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\simpleShader.frag" -o "$(ProjectDir)shaders\simpleShader.frag.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.vert" -o "$(ProjectDir)shaders\pointLight.vert.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "$(ProjectDir)shaders\pointLight.frag.spv"
-</Command>
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.vert" -o "$(ProjectDir)shaders\texture.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.frag" -o "$(ProjectDir)shaders\texture.frag.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.vert" -o "$(ProjectDir)shaders\pbr.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(ProjectDir)shaders\pbr.frag.spv"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -124,7 +127,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)Libraries\include;$(SolutionDir)Libraries\include\GLFW\include;$(SolutionDir)Libraries\include\tinyobjloader;$(SolutionDir)Libraries\include\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)Libraries\include;$(SolutionDir)Libraries\include\GLFW\include;$(SolutionDir)Libraries\include\tinyobjloader;$(SolutionDir)Libraries\include\imgui;$(SolutionDir)Libraries\include\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -149,7 +152,10 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\simpleShader.frag" -o "$(ProjectDir)shaders\simpleShader.frag.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.vert" -o "$(ProjectDir)shaders\pointLight.vert.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "$(ProjectDir)shaders\pointLight.frag.spv"
-</Command>
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.vert" -o "$(ProjectDir)shaders\texture.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.frag" -o "$(ProjectDir)shaders\texture.frag.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.vert" -o "$(ProjectDir)shaders\pbr.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(ProjectDir)shaders\pbr.frag.spv"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,7 +165,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)Libraries\include;$(SolutionDir)Libraries\include\GLFW\include;$(SolutionDir)Libraries\include\tinyobjloader;$(SolutionDir)Libraries\include\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)Libraries\include;$(SolutionDir)Libraries\include\GLFW\include;$(SolutionDir)Libraries\include\tinyobjloader;$(SolutionDir)Libraries\include\imgui;$(SolutionDir)Libraries\include\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -182,7 +188,10 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\simpleShader.frag" -o "$(ProjectDir)shaders\simpleShader.frag.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.vert" -o "$(ProjectDir)shaders\pointLight.vert.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "$(ProjectDir)shaders\pointLight.frag.spv"
-</Command>
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.vert" -o "$(ProjectDir)shaders\texture.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.frag" -o "$(ProjectDir)shaders\texture.frag.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.vert" -o "$(ProjectDir)shaders\pbr.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(ProjectDir)shaders\pbr.frag.spv"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -194,7 +203,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)Libraries\include;$(SolutionDir)Libraries\include\GLFW\include;$(SolutionDir)Libraries\include\tinyobjloader;$(SolutionDir)Libraries\include\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)Libraries\include;$(SolutionDir)Libraries\include\GLFW\include;$(SolutionDir)Libraries\include\tinyobjloader;$(SolutionDir)Libraries\include\imgui;$(SolutionDir)Libraries\include\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -219,7 +228,10 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\simpleShader.frag" -o "$(ProjectDir)shaders\simpleShader.frag.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.vert" -o "$(ProjectDir)shaders\pointLight.vert.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "$(ProjectDir)shaders\pointLight.frag.spv"
-</Command>
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.vert" -o "$(ProjectDir)shaders\texture.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.frag" -o "$(ProjectDir)shaders\texture.frag.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.vert" -o "$(ProjectDir)shaders\pbr.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(ProjectDir)shaders\pbr.frag.spv"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -231,6 +243,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
     <ClInclude Include="Libraries\include\imgui\imstb_rectpack.h" />
     <ClInclude Include="Libraries\include\imgui\imstb_textedit.h" />
     <ClInclude Include="Libraries\include\imgui\imstb_truetype.h" />
+    <ClInclude Include="Libraries\include\stb_image\stb_image.h" />
     <ClInclude Include="src\FrameInfo.h" />
     <ClInclude Include="src\PointLightSystem.h" />
     <ClInclude Include="src\Buffer.h" />
@@ -245,10 +258,12 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\SwapChain.h" />
     <ClInclude Include="src\UI.h" />
+    <ClInclude Include="src\TextureSubSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Libraries\include\imgui\backends\imgui_impl_glfw.cpp" />
@@ -258,6 +273,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
     <ClCompile Include="Libraries\include\imgui\imgui_draw.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_tables.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Libraries\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\PointLightSystem.cpp" />
     <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\Descriptors.cpp" />
@@ -277,9 +293,11 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
     </ClCompile>
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\SwapChain.cpp" />
     <ClCompile Include="src\UI.cpp" />
+    <ClCompile Include="src\TextureSubSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Libraries\lib\glfw3.lib" />
@@ -291,10 +309,17 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
     <None Include="Libraries\include\imgui\backends\vulkan\glsl_shader.vert" />
     <None Include="Scripts\compile_shaders.bat" />
     <None Include="shaders\compile.bat" />
+    <None Include="shaders\pbr.frag" />
+    <None Include="shaders\pbr.vert" />
     <None Include="shaders\pointLight.frag" />
     <None Include="shaders\pointLight.vert" />
     <None Include="shaders\simpleShader.frag" />
     <None Include="shaders\simpleShader.vert" />
+    <None Include="shaders\texture.frag" />
+    <None Include="shaders\texture.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\texture.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
