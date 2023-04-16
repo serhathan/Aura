@@ -57,9 +57,9 @@ namespace Aura {
 
 		auto result = m_swapChain->SubmitCommandBuffers(&commandBuffer, &m_currentImageIndex);
 
-		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || m_window.wasWindowResized())
+		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || m_window.WasWindowResized())
 		{
-			m_window.resetWindowResizedFlag();
+			m_window.ResetWindowResizedFlag();
 			RecreateSwapChain();
 		}
 		else if (result != VK_SUCCESS)
@@ -139,16 +139,17 @@ namespace Aura {
 
 	void Renderer::RecreateSwapChain()
 	{
-		auto extent = m_window.getExtent();
+		auto extent = m_window.GetExtent();
+
 
 		while (extent.width == 0 || extent.height == 0)
 		{
-			extent = m_window.getExtent();
+			extent = m_window.GetExtent();
 			glfwWaitEvents();
 		}
-
+		
 		vkDeviceWaitIdle(m_device.GetDevice());
-		//swapChain = nullptr;
+		m_swapChain = nullptr;
 
 		if (m_swapChain == nullptr)
 		{
@@ -165,7 +166,7 @@ namespace Aura {
 			}
 
 		}
-
+		
 	}
 	
 }

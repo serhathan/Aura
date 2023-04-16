@@ -48,7 +48,10 @@ namespace Aura {
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
+        io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports;
+        io.BackendFlags |= ImGuiBackendFlags_RendererHasViewports;
 
+       
         ImGui::StyleColorsDark();
 
 
@@ -86,18 +89,6 @@ namespace Aura {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGuiIO& io = ImGui::GetIO();
-        if (io.WantCaptureMouse)
-        {
-            /*if (io.MouseDown[0] && io.MouseDelta.x != 0 && io.MouseDelta.y != 0)
-            {
-                // Update the position of the IMGUI window
-                ImVec2 newPos = ImVec2(ImGui::GetMainViewport()->Pos.x, ImGui::GetMainViewport()->Pos.y);
-                newPos = ImVec2(newPos.x + io.MouseDelta.x,newPos.y + io.MouseDelta.y);
-                ImGui::SetWindowPos(newPos, ImGuiCond_Always);
-
-            }*/
-        }
 
 	}
 	void UI::endFrame(VkCommandBuffer commandBuffer)

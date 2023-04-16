@@ -320,6 +320,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\texture.jpg" />
+    <Image Include="textures\viking_room.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

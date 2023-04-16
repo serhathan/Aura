@@ -29,7 +29,7 @@ namespace Aura
     void Texture::CreateTextureImage()
     {
         int texWidth, texHeight, texChannels;
-        stbi_uc *pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+        stbi_uc *pixels = stbi_load("textures/viking_room.png", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
         VkDeviceSize imageSize = texWidth * texHeight * 4;
 
         if (!pixels)
@@ -43,7 +43,7 @@ namespace Aura
             throw std::runtime_error("failed to allocate vertex buffer memory!");
 
         stagingBuffer.WriteToBuffer((void *)pixels, imageSize);
-        //stagingBuffer.Unmap();
+        stagingBuffer.Unmap();
         stbi_image_free(pixels);
 
         VkImageCreateInfo imageInfo{};

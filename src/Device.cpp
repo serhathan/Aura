@@ -194,7 +194,7 @@ namespace Aura {
 		}
 	}
 
-	void Device::CreateSurface() { m_window.createWindowSurface(m_instance, &m_surface); }
+	void Device::CreateSurface() { m_window.CreateWindowSurface(m_instance, &m_surface); }
 
 	bool Device::IsDeviceSuitable(VkPhysicalDevice device) 
 	{

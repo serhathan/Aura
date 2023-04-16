@@ -1,6 +1,5 @@
 #include "Window.h"
 #include"pch.h"
-
 namespace Aura {
 
 	Window::Window(std::string title, uint32_t width, uint32_t height)
@@ -21,8 +20,10 @@ namespace Aura {
 
 		m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
 		glfwSetWindowUserPointer(m_window,this);
-		glfwSetFramebufferSizeCallback(m_window, frameBufferResizeCallback);
-		
+		glfwSetFramebufferSizeCallback(m_window, FrameBufferResizeCallback);
+
+		// Register the window iconify callback function
+		glfwSetWindowIconifyCallback(m_window, WindowIconifyCallback);
 	}
 
 	void Window::OnUpdate()
@@ -30,7 +31,19 @@ namespace Aura {
 		glfwPollEvents();
 	}
 
-	void Window::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
+
+	void Window::WindowIconifyCallback(GLFWwindow* window, int iconified) {
+		if (iconified) {
+			m_isWindowMinimized = true;
+		}
+		else {
+			m_isWindowMinimized = false;
+		}
+	}
+
+
+
+	void Window::CreateWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
 	{
 		if (glfwCreateWindowSurface(instance, m_window, nullptr, surface) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create window surface!");
@@ -50,7 +63,7 @@ namespace Aura {
 
 
 
-	void Window::frameBufferResizeCallback(GLFWwindow* window, int width, int height)
+	void Window::FrameBufferResizeCallback(GLFWwindow* window, int width, int height)
 	{
 		auto appWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
 		appWindow->m_frameBufferResized = true;

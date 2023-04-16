@@ -3,8 +3,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 namespace Aura {
-	static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height);
 
+	static bool m_isWindowMinimized;
 
 	class Window
 	{
@@ -17,16 +17,18 @@ namespace Aura {
 			
 		bool ShouldCloseWindow() const { return glfwWindowShouldClose(m_window); }
 		void OnUpdate();
-		void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
-		VkExtent2D getExtent() {return {m_width,m_height}; }
-		bool wasWindowResized() {return m_frameBufferResized;}
-		void resetWindowResizedFlag() {m_frameBufferResized = false;}
-		GLFWwindow* getGLFWwindow() const { return m_window; }
+		void CreateWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
+		VkExtent2D GetExtent() {return {m_width,m_height}; }
+		bool WasWindowResized() {return m_frameBufferResized;}
+		void ResetWindowResizedFlag() {m_frameBufferResized = false;}
+		GLFWwindow* GetGLFWWindow() const { return m_window; }
 
 	private:
 		void Init();
 		void CleanUp();
-		static void frameBufferResizeCallback(GLFWwindow* window, int width, int height);
+		static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height);
+		static void WindowIconifyCallback(GLFWwindow* window, int iconified);
+
 	private:
 		GLFWwindow* m_window;
 		std::string m_title;
