@@ -235,6 +235,8 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Editor\Editor.h" />
+    <ClInclude Include="src\LayerStack.h" />
     <ClInclude Include="Libraries\include\imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="Libraries\include\imgui\backends\imgui_impl_vulkan.h" />
     <ClInclude Include="Libraries\include\imgui\imconfig.h" />
@@ -245,6 +247,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <ClInclude Include="Libraries\include\imgui\imstb_truetype.h" />
     <ClInclude Include="Libraries\include\stb_image\stb_image.h" />
     <ClInclude Include="src\FrameInfo.h" />
+    <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\PointLightSystem.h" />
     <ClInclude Include="src\Buffer.h" />
     <ClInclude Include="src\Descriptors.h" />
@@ -266,6 +269,8 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <ClInclude Include="src\TextureSubSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Editor\Editor.cpp" />
+    <ClCompile Include="src\LayerStack.cpp" />
     <ClCompile Include="Libraries\include\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="Libraries\include\imgui\backends\imgui_impl_vulkan.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui.cpp" />

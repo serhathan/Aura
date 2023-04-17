@@ -2,8 +2,10 @@
 #include "pch.h"
 #include "GLFW\glfw3.h"
 #include "SwapChain.h"
+#include "Layer.h"
+
 namespace Aura {
-    class UI
+    class UI : public Layer
     {
     public:
         UI(GLFWwindow* window, VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, uint32_t graphicsQueueFamily, VkQueue graphicsQueue, VkRenderPass renderPass, uint32_t subpass);
