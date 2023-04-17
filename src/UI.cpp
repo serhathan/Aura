@@ -23,6 +23,7 @@ namespace Aura {
             { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
         };
 
+
         VkDescriptorPoolCreateInfo pool_info{};
         pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;

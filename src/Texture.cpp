@@ -4,11 +4,13 @@
 #include <FrameInfo.h>
 namespace Aura
 {
-    Texture::Texture(Device& device, std::vector<std::unique_ptr<Buffer>>& uniformBuffers) : m_device(device),m_uniformBuffers(uniformBuffers)
+    Texture::Texture(Device& device) : m_device(device)
     {
         CreateTextureImage();
         CreateTextureImageView();
         CreateTextureSampler();
+
+
 
         /*CreateDescriptorSetLayout();
         CreateDescriptorPool();
@@ -124,7 +126,7 @@ namespace Aura
     // WARNING !!! globalSetLayout can be use here!!!!!
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    
-    
+    /*
     void Texture::CreateDescriptorSetLayout()
     {
         
@@ -223,5 +225,6 @@ namespace Aura
         }
         
     }
+    */
     
 }

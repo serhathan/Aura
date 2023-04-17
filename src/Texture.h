@@ -8,7 +8,7 @@ namespace Aura
     class Texture
     {
     public:
-        Texture(Device& device, std::vector<std::unique_ptr<Buffer>>& uniformBuffers);
+        Texture(Device& device);
         ~Texture();
         Texture(const Texture &c) = delete;
         Texture(const Texture &&c) = delete;
@@ -27,10 +27,10 @@ namespace Aura
         void CreateTextureSampler();
 
 
-        void CreateDescriptorSetLayout();
-        void CreateDescriptorPool();
-        void CreateDescriptorSets();
-        Device &m_device;
+        //void CreateDescriptorSetLayout();
+        //void CreateDescriptorPool();
+        //void CreateDescriptorSets();
+        Device& m_device;
 
         VkImage m_textureImage;
         VkImageView m_textureImageView;
@@ -41,6 +41,5 @@ namespace Aura
         VkDescriptorSetLayout m_descSetLayout;
         std::vector<VkDescriptorSet> m_descSets;
 
-        std::vector<std::unique_ptr<Buffer>>& m_uniformBuffers;
     };
 }

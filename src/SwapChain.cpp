@@ -121,17 +121,17 @@ namespace Aura {
 		VkPresentModeKHR presentMode = ChooseSwapPresentMode(swapChainSupport.presentModes);
 		VkExtent2D extent = ChooseSwapExtent(swapChainSupport.capabilities);
 
-		uint32_t GetImageCount = swapChainSupport.capabilities.minImageCount + 1;
+		uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
 		if (swapChainSupport.capabilities.maxImageCount > 0 &&
-			GetImageCount > swapChainSupport.capabilities.maxImageCount) {
-			GetImageCount = swapChainSupport.capabilities.maxImageCount;
+			imageCount > swapChainSupport.capabilities.maxImageCount) {
+			imageCount = swapChainSupport.capabilities.maxImageCount;
 		}
 
 		VkSwapchainCreateInfoKHR createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
 		createInfo.surface = m_device.GetSurface();
 
-		createInfo.minImageCount = GetImageCount;
+		createInfo.minImageCount = imageCount;
 		createInfo.imageFormat = surfaceFormat.format;
 		createInfo.imageColorSpace = surfaceFormat.colorSpace;
 		createInfo.imageExtent = extent;
@@ -168,9 +168,9 @@ namespace Aura {
 		// allowed to create a swap chain with more. That's why we'll first query the final number of
 		// images with vkGetSwapchainImagesKHR, then resize the container and finally call it again to
 		// retrieve the handles.
-		vkGetSwapchainImagesKHR(m_device.GetDevice(), m_swapChain, &GetImageCount, nullptr);
-		m_swapChainImages.resize(GetImageCount);
-		vkGetSwapchainImagesKHR(m_device.GetDevice(), m_swapChain, &GetImageCount, m_swapChainImages.data());
+		vkGetSwapchainImagesKHR(m_device.GetDevice(), m_swapChain, &imageCount, nullptr);
+		m_swapChainImages.resize(imageCount);
+		vkGetSwapchainImagesKHR(m_device.GetDevice(), m_swapChain, &imageCount, m_swapChainImages.data());
 
 		m_swapChainImageFormat = surfaceFormat.format;
 		m_swapChainExtent = extent;

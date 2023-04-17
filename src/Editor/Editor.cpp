@@ -1,8 +1,10 @@
 #include "Editor.h"
+#include <backends/imgui_impl_vulkan.h>
 
 namespace Aura {
-	Editor::Editor() : Layer("EditorLayer")
+	Editor::Editor(Device& device) : Layer("EditorLayer"),m_device(device)
 	{
+		m_viewportTexture = std::make_unique<Texture>(device);
 	}
 	void Editor::OnAttach()
 	{
@@ -15,7 +17,6 @@ namespace Aura {
 	}
 	void Editor::OnImGuiRender()
 	{
-		// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
 		{
 			static float f = 0.0f;
 			static int counter = 0;
@@ -35,5 +36,17 @@ namespace Aura {
 			ImGui::Text("Renderer ortalama %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 			ImGui::End();
 		}
+
+		ImGui::Begin("Viewport");
+
+
+		
+		VkDescriptorSet descSet = ImGui_ImplVulkan_AddTexture(m_viewportTexture->GetTextureSampler(), m_viewportTexture->GetTextureImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		ImGui::Image((ImTextureID)descSet, ImVec2{viewportPanelSize.x, viewportPanelSize.y});
+
+
+		ImGui::End();
 	}
 }

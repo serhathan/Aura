@@ -29,7 +29,7 @@ namespace Aura {
 
 		//InitGUI();
 		PushOverlay(&m_ui);
-		PushLayer(new Editor());
+		PushLayer(new Editor(m_device));
 
 	}
 	App::~App()
@@ -254,66 +254,7 @@ namespace Aura {
 		layer->OnAttach();
 	}
 
-	/*void App::InitGUI()
-	{
-		std::unique_ptr<DescriptorPool> imguiPool;
 
-		DescriptorPool::Builder builder(m_device);
-
-		builder.SetMaxSets(1000 * 11);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_SAMPLER,1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000);
-
-		imguiPool = builder.Build();
-
-		auto queueFamilyIndices = m_device.FindPhysicalQueueFamilies();
-
-		// Setup Dear ImGui context
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-		io.Fonts->AddFontDefault();
-
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsLight();
-			// Setup Platform/Renderer backends
-		ImGui_ImplGlfw_InitForVulkan(m_window.getGLFWwindow(), true);
-		ImGui_ImplVulkan_InitInfo init_info = {};
-		init_info.Instance = m_device.GetInstance();
-		init_info.PhysicalDevice = m_device.GetPhysicalDevice();
-		init_info.Device = m_device.GetDevice();
-		init_info.QueueFamily = queueFamilyIndices.graphicsFamily.value();
-		init_info.Queue = m_device.GetGraphicsQueue();
-		init_info.PipelineCache = VK_NULL_HANDLE;
-		init_info.DescriptorPool = imguiPool->GetDescriptorPool();
-		//init_info.Subpass = 0;
-		init_info.MinImageCount = SwapChain::MAX_FRAMES_IN_FLIGHT;
-		init_info.ImageCount = SwapChain::MAX_FRAMES_IN_FLIGHT;
-		init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
-		init_info.Allocator = nullptr;
-		init_info.CheckVkResultFn = nullptr;
-		ImGui_ImplVulkan_Init(&init_info, m_renderer.GetSwapChainRenderPass());
-
-		// Upload Fonts
-		{
-			VkCommandBuffer commandBuffer = m_device.BeginSingleTimeCommands();
-			ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
-			m_device.EndSingleTimeCommands(commandBuffer);
-			ImGui_ImplVulkan_DestroyFontUploadObjects();
-		}
-	}
-	*/
+	
 
 }

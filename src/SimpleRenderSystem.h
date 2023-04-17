@@ -21,6 +21,7 @@ namespace Aura {
 		void RenderGameObjects(FrameInfo& frameInfo);
 
 	private:
+	
 		void CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout);
 		void CreatePipeline(VkRenderPass renderPass);
 
