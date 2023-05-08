@@ -5,6 +5,7 @@ namespace Aura {
 	Editor::Editor(Device& device) : Layer("EditorLayer"),m_device(device)
 	{
 		m_viewportTexture = std::make_unique<Texture>(device);
+		m_viewportTexture->LoadTexture("textures/viking_room.png");
 	}
 	void Editor::OnAttach()
 	{

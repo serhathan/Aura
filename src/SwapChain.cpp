@@ -178,22 +178,9 @@ namespace Aura {
 
 	void SwapChain::CreateImageViews() {
 		m_swapChainImageViews.resize(m_swapChainImages.size());
-		for (size_t i = 0; i < m_swapChainImages.size(); i++) {
-			VkImageViewCreateInfo viewInfo{};
-			viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-			viewInfo.image = m_swapChainImages[i];
-			viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-			viewInfo.format = m_swapChainImageFormat;
-			viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-			viewInfo.subresourceRange.baseMipLevel = 0;
-			viewInfo.subresourceRange.levelCount = 1;
-			viewInfo.subresourceRange.baseArrayLayer = 0;
-			viewInfo.subresourceRange.layerCount = 1;
 
-			if (vkCreateImageView(m_device.GetDevice(), &viewInfo, nullptr, &m_swapChainImageViews[i]) !=
-				VK_SUCCESS) {
-				throw std::runtime_error("failed to create texture image view!");
-			}
+		for (uint32_t i = 0; i < m_swapChainImages.size(); i++) {
+			m_swapChainImageViews[i] = m_device.CreateImageView(m_swapChainImages[i], m_swapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
 		}
 	}
 
@@ -315,20 +302,8 @@ namespace Aura {
 				m_depthImages[i],
 				m_depthImageMemorys[i]);
 
-			VkImageViewCreateInfo viewInfo{};
-			viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-			viewInfo.image = m_depthImages[i];
-			viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-			viewInfo.format = depthFormat;
-			viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-			viewInfo.subresourceRange.baseMipLevel = 0;
-			viewInfo.subresourceRange.levelCount = 1;
-			viewInfo.subresourceRange.baseArrayLayer = 0;
-			viewInfo.subresourceRange.layerCount = 1;
+			m_depthImageViews[i] = m_device.CreateImageView(m_depthImages[i], depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
 
-			if (vkCreateImageView(m_device.GetDevice(), &viewInfo, nullptr, &m_depthImageViews[i]) != VK_SUCCESS) {
-				throw std::runtime_error("failed to create texture image view!");
-			}
 		}
 	}
 

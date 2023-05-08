@@ -39,6 +39,8 @@ namespace Aura {
 		UI m_ui{ m_window.GetGLFWWindow(),m_device.GetInstance(),m_device.GetPhysicalDevice(),m_device.GetDevice(),
 			m_device.FindPhysicalQueueFamilies().graphicsFamily.value(),m_device.GetGraphicsQueue(),m_renderer.GetSwapChainRenderPass(),0 };
 		LayerStack m_layerStack;
+
+
 	};
 }
 

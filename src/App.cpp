@@ -23,6 +23,8 @@ namespace Aura {
 
 		builder.SetMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
 		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SwapChain::MAX_FRAMES_IN_FLIGHT);
+		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SwapChain::MAX_FRAMES_IN_FLIGHT);
+
 		m_globalPool = builder.Build();
 
 		loadGameObjects();
@@ -39,6 +41,7 @@ namespace Aura {
 
 	void App::Run()
 	{
+		Texture m_texture{ m_device };
 
 		std::vector<std::unique_ptr<Buffer>> uboBuffers(SwapChain::MAX_FRAMES_IN_FLIGHT);
 		for (int i = 0; i < uboBuffers.size(); i++) {
@@ -48,14 +51,22 @@ namespace Aura {
 
 		DescriptorSetLayout::Builder builder(m_device);
 		builder.AddBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+		builder.AddBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
+
 		auto globalSetLayout = builder.Build();
+		m_texture.LoadTexture("textures/viking_room.png");
+
+
 
 		std::vector<VkDescriptorSet> globalDescriptorSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
 
 		for (int i = 0; i < globalDescriptorSets.size(); i++)
 		{
 			auto bufferInfo = uboBuffers[i]->DescriptorInfo();
-			DescriptorWriter(*globalSetLayout, *m_globalPool).writeBuffer(0, &bufferInfo).Build(globalDescriptorSets[i]);
+			DescriptorWriter(*globalSetLayout, *m_globalPool)
+				.writeBuffer(0, &bufferInfo)
+				.writeImage(1,&m_texture.imageDescriptor)
+				.Build(globalDescriptorSets[i]);
 		}
 
 
@@ -190,7 +201,7 @@ namespace Aura {
 	{
 		std::shared_ptr<Model> model = Model::CreateModelFormFile(m_device, "models/flat_vase.obj");
 
-		auto flatVase = GameObject::CreateGameObject();
+		/*auto flatVase = GameObject::CreateGameObject();
 		flatVase.model = model;
 		flatVase.transform.translation = { -0.5f,0.5f,0.f };
 		flatVase.transform.scale = { 1.f,1.f,1.f };
@@ -216,7 +227,15 @@ namespace Aura {
 		cube.transform.translation = { 0.2f,.2f,0.f };
 		cube.transform.scale = { 0.1f,0.1f,0.1f };
 		m_gameObjects.emplace(cube.getId(), std::move(cube));
+		*/
 
+		model = Model::CreateModelFormFile(m_device, "models/viking_room.obj");
+		auto cube = GameObject::CreateGameObject();
+		cube.model = model;
+		cube.transform.translation = { 0.2f,.2f,0.f };
+		cube.transform.rotation = { 45.f,90.f,0.f };
+		cube.transform.scale = { 1.f,1.f,1.f };
+		m_gameObjects.emplace(cube.getId(), std::move(cube));
 
 		std::vector<glm::vec3> lightColors{
 			  {1.f, .1f, .1f},
@@ -228,7 +247,7 @@ namespace Aura {
 		};
 
 		for (int i = 0; i < lightColors.size(); i++) {
-			auto pointLight = GameObject::MakePointLight(.1f);
+			auto pointLight = GameObject::MakePointLight(2.1f);
 			pointLight.color = lightColors[i];
 			auto rotateLight = glm::rotate(
 				glm::mat4(1.f),

@@ -14,32 +14,29 @@ namespace Aura
         Texture(const Texture &&c) = delete;
         Texture &operator=(const Texture &&c) = delete;
         Texture &operator=(const Texture &c) = delete;
-        VkImageView GetTextureImageView() const { return m_textureImageView; }
-        VkSampler GetTextureSampler() const { return m_textureSampler; }
+        VkImageView GetTextureImageView() const { return m_imageView; }
+        VkSampler GetTextureSampler() const { return m_sampler; }
+        void LoadTexture(std::string filePath);
+        void UpdateDescriptor(); cl
+    public:
+        VkDescriptorImageInfo imageDescriptor;
 
-        VkDescriptorPool GetDescPool() const { return m_descPool; }
-        VkDescriptorSetLayout GetDescSetLayout()const { return m_descSetLayout; }
-        std::vector<VkDescriptorSet> GetDescSets() const { return m_descSets; }
     private:
-        void CreateTextureImage();
+        void CreateTextureImage(std::string& filePath);
         void CreateTextureImageView();
-        VkImageView CreateImageView(VkImage image, VkFormat format);
         void CreateTextureSampler();
+        void GenerateMipmaps();
 
+        int m_width, m_height;
+        uint32_t m_mipLevels;
 
-        //void CreateDescriptorSetLayout();
-        //void CreateDescriptorPool();
-        //void CreateDescriptorSets();
         Device& m_device;
 
-        VkImage m_textureImage;
-        VkImageView m_textureImageView;
-        VkSampler m_textureSampler;
-        VkDeviceMemory m_textureImageMemory;
-
-        VkDescriptorPool m_descPool;
-        VkDescriptorSetLayout m_descSetLayout;
-        std::vector<VkDescriptorSet> m_descSets;
-
+        VkImage m_image;
+        VkImageView m_imageView;
+        VkSampler m_sampler;
+        VkDeviceMemory m_imageMemory;
+        VkFormat m_imageFormat = VK_FORMAT_R8G8B8A8_SRGB;
+        VkImageLayout m_imageLayout;
     };
 }
