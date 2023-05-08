@@ -17,7 +17,7 @@ namespace Aura
         VkImageView GetTextureImageView() const { return m_imageView; }
         VkSampler GetTextureSampler() const { return m_sampler; }
         void LoadTexture(std::string filePath);
-        void UpdateDescriptor(); cl
+        void UpdateDescriptor(); 
     public:
         VkDescriptorImageInfo imageDescriptor;
 
