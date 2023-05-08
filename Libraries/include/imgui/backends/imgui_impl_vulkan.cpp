@@ -376,7 +376,7 @@ static uint32_t ImGui_ImplVulkan_MemoryType(VkMemoryPropertyFlags properties, ui
     return 0xFFFFFFFF; // Unable to find memoryType
 }
 
-static void check_vk_result(VkResult err)
+static void CheckResult(VkResult err)
 {
     ImGui_ImplVulkan_Data* bd = ImGui_ImplVulkan_GetBackendData();
     if (!bd)
@@ -403,7 +403,7 @@ static void CreateOrResizeBuffer(VkBuffer& buffer, VkDeviceMemory& buffer_memory
     buffer_info.usage = usage;
     buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     err = vkCreateBuffer(v->Device, &buffer_info, v->Allocator, &buffer);
-    check_vk_result(err);
+    CheckResult(err);
 
     VkMemoryRequirements req;
     vkGetBufferMemoryRequirements(v->Device, buffer, &req);
@@ -413,10 +413,10 @@ static void CreateOrResizeBuffer(VkBuffer& buffer, VkDeviceMemory& buffer_memory
     alloc_info.allocationSize = req.size;
     alloc_info.memoryTypeIndex = ImGui_ImplVulkan_MemoryType(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, req.memoryTypeBits);
     err = vkAllocateMemory(v->Device, &alloc_info, v->Allocator, &buffer_memory);
-    check_vk_result(err);
+    CheckResult(err);
 
     err = vkBindBufferMemory(v->Device, buffer, buffer_memory, 0);
-    check_vk_result(err);
+    CheckResult(err);
     p_buffer_size = req.size;
 }
 
@@ -507,9 +507,9 @@ void ImGui_ImplVulkan_RenderDrawData(ImDrawData* draw_data, VkCommandBuffer comm
         ImDrawVert* vtx_dst = nullptr;
         ImDrawIdx* idx_dst = nullptr;
         VkResult err = vkMapMemory(v->Device, rb->VertexBufferMemory, 0, rb->VertexBufferSize, 0, (void**)(&vtx_dst));
-        check_vk_result(err);
+        CheckResult(err);
         err = vkMapMemory(v->Device, rb->IndexBufferMemory, 0, rb->IndexBufferSize, 0, (void**)(&idx_dst));
-        check_vk_result(err);
+        CheckResult(err);
         for (int n = 0; n < draw_data->CmdListsCount; n++)
         {
             const ImDrawList* cmd_list = draw_data->CmdLists[n];
@@ -526,7 +526,7 @@ void ImGui_ImplVulkan_RenderDrawData(ImDrawData* draw_data, VkCommandBuffer comm
         range[1].memory = rb->IndexBufferMemory;
         range[1].size = VK_WHOLE_SIZE;
         err = vkFlushMappedMemoryRanges(v->Device, 2, range);
-        check_vk_result(err);
+        CheckResult(err);
         vkUnmapMemory(v->Device, rb->VertexBufferMemory);
         vkUnmapMemory(v->Device, rb->IndexBufferMemory);
     }
@@ -638,7 +638,7 @@ bool ImGui_ImplVulkan_CreateFontsTexture(VkCommandBuffer command_buffer)
         info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         err = vkCreateImage(v->Device, &info, v->Allocator, &bd->FontImage);
-        check_vk_result(err);
+        CheckResult(err);
         VkMemoryRequirements req;
         vkGetImageMemoryRequirements(v->Device, bd->FontImage, &req);
         VkMemoryAllocateInfo alloc_info = {};
@@ -646,9 +646,9 @@ bool ImGui_ImplVulkan_CreateFontsTexture(VkCommandBuffer command_buffer)
         alloc_info.allocationSize = req.size;
         alloc_info.memoryTypeIndex = ImGui_ImplVulkan_MemoryType(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, req.memoryTypeBits);
         err = vkAllocateMemory(v->Device, &alloc_info, v->Allocator, &bd->FontMemory);
-        check_vk_result(err);
+        CheckResult(err);
         err = vkBindImageMemory(v->Device, bd->FontImage, bd->FontMemory, 0);
-        check_vk_result(err);
+        CheckResult(err);
     }
 
     // Create the Image View:
@@ -662,7 +662,7 @@ bool ImGui_ImplVulkan_CreateFontsTexture(VkCommandBuffer command_buffer)
         info.subresourceRange.levelCount = 1;
         info.subresourceRange.layerCount = 1;
         err = vkCreateImageView(v->Device, &info, v->Allocator, &bd->FontView);
-        check_vk_result(err);
+        CheckResult(err);
     }
 
     // Create the Descriptor Set:
@@ -676,7 +676,7 @@ bool ImGui_ImplVulkan_CreateFontsTexture(VkCommandBuffer command_buffer)
         buffer_info.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
         buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         err = vkCreateBuffer(v->Device, &buffer_info, v->Allocator, &bd->UploadBuffer);
-        check_vk_result(err);
+        CheckResult(err);
         VkMemoryRequirements req;
         vkGetBufferMemoryRequirements(v->Device, bd->UploadBuffer, &req);
         bd->BufferMemoryAlignment = (bd->BufferMemoryAlignment > req.alignment) ? bd->BufferMemoryAlignment : req.alignment;
@@ -685,23 +685,23 @@ bool ImGui_ImplVulkan_CreateFontsTexture(VkCommandBuffer command_buffer)
         alloc_info.allocationSize = req.size;
         alloc_info.memoryTypeIndex = ImGui_ImplVulkan_MemoryType(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, req.memoryTypeBits);
         err = vkAllocateMemory(v->Device, &alloc_info, v->Allocator, &bd->UploadBufferMemory);
-        check_vk_result(err);
+        CheckResult(err);
         err = vkBindBufferMemory(v->Device, bd->UploadBuffer, bd->UploadBufferMemory, 0);
-        check_vk_result(err);
+        CheckResult(err);
     }
 
     // Upload to Buffer:
     {
         char* map = nullptr;
         err = vkMapMemory(v->Device, bd->UploadBufferMemory, 0, upload_size, 0, (void**)(&map));
-        check_vk_result(err);
+        CheckResult(err);
         memcpy(map, pixels, upload_size);
         VkMappedMemoryRange range[1] = {};
         range[0].sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
         range[0].memory = bd->UploadBufferMemory;
         range[0].size = upload_size;
         err = vkFlushMappedMemoryRanges(v->Device, 1, range);
-        check_vk_result(err);
+        CheckResult(err);
         vkUnmapMemory(v->Device, bd->UploadBufferMemory);
     }
 
@@ -760,7 +760,7 @@ static void ImGui_ImplVulkan_CreateShaderModules(VkDevice device, const VkAlloca
         vert_info.codeSize = sizeof(__glsl_shader_vert_spv);
         vert_info.pCode = (uint32_t*)__glsl_shader_vert_spv;
         VkResult err = vkCreateShaderModule(device, &vert_info, allocator, &bd->ShaderModuleVert);
-        check_vk_result(err);
+        CheckResult(err);
     }
     if (bd->ShaderModuleFrag == VK_NULL_HANDLE)
     {
@@ -769,7 +769,7 @@ static void ImGui_ImplVulkan_CreateShaderModules(VkDevice device, const VkAlloca
         frag_info.codeSize = sizeof(__glsl_shader_frag_spv);
         frag_info.pCode = (uint32_t*)__glsl_shader_frag_spv;
         VkResult err = vkCreateShaderModule(device, &frag_info, allocator, &bd->ShaderModuleFrag);
-        check_vk_result(err);
+        CheckResult(err);
     }
 }
 
@@ -874,7 +874,7 @@ static void ImGui_ImplVulkan_CreatePipeline(VkDevice device, const VkAllocationC
     info.renderPass = renderPass;
     info.subpass = subpass;
     VkResult err = vkCreateGraphicsPipelines(device, pipelineCache, 1, &info, allocator, pipeline);
-    check_vk_result(err);
+    CheckResult(err);
 }
 
 bool ImGui_ImplVulkan_CreateDeviceObjects()
@@ -898,7 +898,7 @@ bool ImGui_ImplVulkan_CreateDeviceObjects()
         info.maxLod = 1000;
         info.maxAnisotropy = 1.0f;
         err = vkCreateSampler(v->Device, &info, v->Allocator, &bd->FontSampler);
-        check_vk_result(err);
+        CheckResult(err);
     }
 
     if (!bd->DescriptorSetLayout)
@@ -912,7 +912,7 @@ bool ImGui_ImplVulkan_CreateDeviceObjects()
         info.bindingCount = 1;
         info.pBindings = binding;
         err = vkCreateDescriptorSetLayout(v->Device, &info, v->Allocator, &bd->DescriptorSetLayout);
-        check_vk_result(err);
+        CheckResult(err);
     }
 
     if (!bd->PipelineLayout)
@@ -930,7 +930,7 @@ bool ImGui_ImplVulkan_CreateDeviceObjects()
         layout_info.pushConstantRangeCount = 1;
         layout_info.pPushConstantRanges = push_constants;
         err = vkCreatePipelineLayout(v->Device, &layout_info, v->Allocator, &bd->PipelineLayout);
-        check_vk_result(err);
+        CheckResult(err);
     }
 
     ImGui_ImplVulkan_CreatePipeline(v->Device, v->Allocator, v->PipelineCache, bd->RenderPass, v->MSAASamples, &bd->Pipeline, bd->Subpass);
@@ -1073,7 +1073,7 @@ void ImGui_ImplVulkan_SetMinImageCount(uint32_t min_image_count)
     IM_ASSERT(0); // FIXME-VIEWPORT: Unsupported. Need to recreate all swap chains!
     ImGui_ImplVulkan_InitInfo* v = &bd->VulkanInitInfo;
     VkResult err = vkDeviceWaitIdle(v->Device);
-    check_vk_result(err);
+    CheckResult(err);
     ImGui_ImplVulkanH_DestroyAllViewportsRenderBuffers(v->Device, v->Allocator);
 
     bd->VulkanInitInfo.MinImageCount = min_image_count;
@@ -1095,7 +1095,7 @@ VkDescriptorSet ImGui_ImplVulkan_AddTexture(VkSampler sampler, VkImageView image
         alloc_info.descriptorSetCount = 1;
         alloc_info.pSetLayouts = &bd->DescriptorSetLayout;
         VkResult err = vkAllocateDescriptorSets(v->Device, &alloc_info, &descriptor_set);
-        check_vk_result(err);
+        CheckResult(err);
     }
 
     // Update the Descriptor Set:
@@ -1224,7 +1224,7 @@ void ImGui_ImplVulkanH_CreateWindowCommandBuffers(VkPhysicalDevice physical_devi
             info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
             info.queueFamilyIndex = queue_family;
             err = vkCreateCommandPool(device, &info, allocator, &fd->CommandPool);
-            check_vk_result(err);
+            CheckResult(err);
         }
         {
             VkCommandBufferAllocateInfo info = {};
@@ -1233,22 +1233,22 @@ void ImGui_ImplVulkanH_CreateWindowCommandBuffers(VkPhysicalDevice physical_devi
             info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
             info.commandBufferCount = 1;
             err = vkAllocateCommandBuffers(device, &info, &fd->CommandBuffer);
-            check_vk_result(err);
+            CheckResult(err);
         }
         {
             VkFenceCreateInfo info = {};
             info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
             info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
             err = vkCreateFence(device, &info, allocator, &fd->Fence);
-            check_vk_result(err);
+            CheckResult(err);
         }
         {
             VkSemaphoreCreateInfo info = {};
             info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
             err = vkCreateSemaphore(device, &info, allocator, &fsd->ImageAcquiredSemaphore);
-            check_vk_result(err);
+            CheckResult(err);
             err = vkCreateSemaphore(device, &info, allocator, &fsd->RenderCompleteSemaphore);
-            check_vk_result(err);
+            CheckResult(err);
         }
     }
 }
@@ -1272,7 +1272,7 @@ void ImGui_ImplVulkanH_CreateWindowSwapChain(VkPhysicalDevice physical_device, V
     VkSwapchainKHR old_swapchain = wd->Swapchain;
     wd->Swapchain = VK_NULL_HANDLE;
     err = vkDeviceWaitIdle(device);
-    check_vk_result(err);
+    CheckResult(err);
 
     // We don't use ImGui_ImplVulkanH_DestroyWindow() because we want to preserve the old swapchain to create the new one.
     // Destroy old Framebuffer
@@ -1311,7 +1311,7 @@ void ImGui_ImplVulkanH_CreateWindowSwapChain(VkPhysicalDevice physical_device, V
         info.oldSwapchain = old_swapchain;
         VkSurfaceCapabilitiesKHR cap;
         err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device, wd->Surface, &cap);
-        check_vk_result(err);
+        CheckResult(err);
         if (info.minImageCount < cap.minImageCount)
             info.minImageCount = cap.minImageCount;
         else if (cap.maxImageCount != 0 && info.minImageCount > cap.maxImageCount)
@@ -1328,14 +1328,14 @@ void ImGui_ImplVulkanH_CreateWindowSwapChain(VkPhysicalDevice physical_device, V
             info.imageExtent.height = wd->Height = cap.currentExtent.height;
         }
         err = vkCreateSwapchainKHR(device, &info, allocator, &wd->Swapchain);
-        check_vk_result(err);
+        CheckResult(err);
         err = vkGetSwapchainImagesKHR(device, wd->Swapchain, &wd->ImageCount, nullptr);
-        check_vk_result(err);
+        CheckResult(err);
         VkImage backbuffers[16] = {};
         IM_ASSERT(wd->ImageCount >= min_image_count);
         IM_ASSERT(wd->ImageCount < IM_ARRAYSIZE(backbuffers));
         err = vkGetSwapchainImagesKHR(device, wd->Swapchain, &wd->ImageCount, backbuffers);
-        check_vk_result(err);
+        CheckResult(err);
 
         IM_ASSERT(wd->Frames == nullptr);
         wd->Frames = (ImGui_ImplVulkanH_Frame*)IM_ALLOC(sizeof(ImGui_ImplVulkanH_Frame) * wd->ImageCount);
@@ -1382,7 +1382,7 @@ void ImGui_ImplVulkanH_CreateWindowSwapChain(VkPhysicalDevice physical_device, V
         info.dependencyCount = 1;
         info.pDependencies = &dependency;
         err = vkCreateRenderPass(device, &info, allocator, &wd->RenderPass);
-        check_vk_result(err);
+        CheckResult(err);
 
         // We do not create a pipeline by default as this is also used by examples' main.cpp,
         // but secondary viewport in multi-viewport mode may want to create one with:
@@ -1406,7 +1406,7 @@ void ImGui_ImplVulkanH_CreateWindowSwapChain(VkPhysicalDevice physical_device, V
             ImGui_ImplVulkanH_Frame* fd = &wd->Frames[i];
             info.image = fd->Backbuffer;
             err = vkCreateImageView(device, &info, allocator, &fd->BackbufferView);
-            check_vk_result(err);
+            CheckResult(err);
         }
     }
 
@@ -1426,7 +1426,7 @@ void ImGui_ImplVulkanH_CreateWindowSwapChain(VkPhysicalDevice physical_device, V
             ImGui_ImplVulkanH_Frame* fd = &wd->Frames[i];
             attachment[0] = fd->BackbufferView;
             err = vkCreateFramebuffer(device, &info, allocator, &fd->Framebuffer);
-            check_vk_result(err);
+            CheckResult(err);
         }
     }
 }
@@ -1530,7 +1530,7 @@ static void ImGui_ImplVulkan_CreateWindow(ImGuiViewport* viewport)
     // Create surface
     ImGuiPlatformIO& platform_io = ImGui::GetPlatformIO();
     VkResult err = (VkResult)platform_io.Platform_CreateVkSurface(viewport, (ImU64)v->Instance, (const void*)v->Allocator, (ImU64*)&wd->Surface);
-    check_vk_result(err);
+    CheckResult(err);
 
     // Check for WSI support
     VkBool32 res;
@@ -1597,7 +1597,7 @@ static void ImGui_ImplVulkan_RenderWindow(ImGuiViewport* viewport, void*)
     {
         {
           err = vkAcquireNextImageKHR(v->Device, wd->Swapchain, UINT64_MAX, fsd->ImageAcquiredSemaphore, VK_NULL_HANDLE, &wd->FrameIndex);
-          check_vk_result(err);
+          CheckResult(err);
           fd = &wd->Frames[wd->FrameIndex];
         }
         for (;;)
@@ -1605,16 +1605,16 @@ static void ImGui_ImplVulkan_RenderWindow(ImGuiViewport* viewport, void*)
             err = vkWaitForFences(v->Device, 1, &fd->Fence, VK_TRUE, 100);
             if (err == VK_SUCCESS) break;
             if (err == VK_TIMEOUT) continue;
-            check_vk_result(err);
+            CheckResult(err);
         }
         {
             err = vkResetCommandPool(v->Device, fd->CommandPool, 0);
-            check_vk_result(err);
+            CheckResult(err);
             VkCommandBufferBeginInfo info = {};
             info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
             info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
             err = vkBeginCommandBuffer(fd->CommandBuffer, &info);
-            check_vk_result(err);
+            CheckResult(err);
         }
         {
             ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -1649,11 +1649,11 @@ static void ImGui_ImplVulkan_RenderWindow(ImGuiViewport* viewport, void*)
             info.pSignalSemaphores = &fsd->RenderCompleteSemaphore;
 
             err = vkEndCommandBuffer(fd->CommandBuffer);
-            check_vk_result(err);
+            CheckResult(err);
             err = vkResetFences(v->Device, 1, &fd->Fence);
-            check_vk_result(err);
+            CheckResult(err);
             err = vkQueueSubmit(v->Queue, 1, &info, fd->Fence);
-            check_vk_result(err);
+            CheckResult(err);
         }
     }
 }
@@ -1680,7 +1680,7 @@ static void ImGui_ImplVulkan_SwapBuffers(ImGuiViewport* viewport, void*)
     if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
         ImGui_ImplVulkanH_CreateOrResizeWindow(v->Instance, v->PhysicalDevice, v->Device, &vd->Window, v->QueueFamily, v->Allocator, (int)viewport->Size.x, (int)viewport->Size.y, v->MinImageCount);
     else
-        check_vk_result(err);
+        CheckResult(err);
 
     wd->FrameIndex = (wd->FrameIndex + 1) % wd->ImageCount;         // This is for the next vkWaitForFences()
     wd->SemaphoreIndex = (wd->SemaphoreIndex + 1) % wd->ImageCount; // Now we can use the next set of semaphores

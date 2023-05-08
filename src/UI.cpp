@@ -6,6 +6,7 @@
 
 namespace Aura {
 	UI::UI(GLFWwindow* window, VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, uint32_t graphicsQueueFamily, VkQueue graphicsQueue,  VkRenderPass renderPass, uint32_t subpass)
+        : m_device(device)
 	{
         CreateRenderPass(device);
         VkDescriptorPoolSize pool_sizes[] =
@@ -72,7 +73,7 @@ namespace Aura {
         initInfo.ImageCount = imageCount;
         initInfo.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
         initInfo.Allocator = VK_NULL_HANDLE;
-        initInfo.CheckVkResultFn = check_vk_result;
+        initInfo.CheckVkResultFn = CheckResult;
         ImGui_ImplVulkan_Init(&initInfo, renderPass);
 
         // Record command buffers
@@ -84,7 +85,12 @@ namespace Aura {
 
 	}
 
-	void UI::beginFrame()
+    UI::~UI()
+    {
+        Cleanup();
+    }
+
+	void UI::BeginFrame()
 	{
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -92,7 +98,7 @@ namespace Aura {
 
 
 	}
-	void UI::endFrame(VkCommandBuffer commandBuffer)
+	void UI::EndFrame(VkCommandBuffer commandBuffer)
 	{
         ImGuiIO& io = ImGui::GetIO();
 
@@ -108,14 +114,14 @@ namespace Aura {
         }
 
 	}
-	void UI::cleanup(VkDevice device)
+	void UI::Cleanup()
 	{
         ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
 
 	}
-	void UI::check_vk_result(VkResult result)
+	void UI::CheckResult(VkResult result)
 	{
         if (result != VK_SUCCESS) {
             throw std::runtime_error("ImGui Vulkan initialization failed");

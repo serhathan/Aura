@@ -9,20 +9,20 @@ namespace Aura {
     {
     public:
         UI(GLFWwindow* window, VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, uint32_t graphicsQueueFamily, VkQueue graphicsQueue, VkRenderPass renderPass, uint32_t subpass);
-
-        void beginFrame();
-        void endFrame(VkCommandBuffer commandBuffer);
-        void cleanup(VkDevice device);
+        ~UI();
+        void BeginFrame();
+        void EndFrame(VkCommandBuffer commandBuffer);
 
     private:
-        static void check_vk_result(VkResult result);
+        static void CheckResult(VkResult result);
+        void Cleanup();
 
         VkCommandBuffer beginSingleTimeCommands(VkDevice device, VkCommandPool commandPool);
         void endSingleTimeCommands(VkDevice device, VkCommandPool commandPool, VkQueue graphicsQueue, VkCommandBuffer commandBuffer);
         void CreateRenderPass(VkDevice device);
 
         std::vector<VkFramebuffer> m_swapChainFramebuffers;
-
+        VkDevice m_device;
         VkRenderPass m_imguiRenderPass;
         VkDescriptorPool descriptorPool;
         uint32_t minImageCount = SwapChain::MAX_FRAMES_IN_FLIGHT;

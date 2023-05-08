@@ -30,13 +30,12 @@ namespace Aura {
 		loadGameObjects();
 
 		//InitGUI();
-		PushOverlay(&m_ui);
+		PushOverlay(m_ui);
 		PushLayer(new Editor(m_device));
 
 	}
 	App::~App()
 	{
-		m_ui.cleanup(m_device.GetDevice());
 	}
 
 	void App::Run()
@@ -131,12 +130,12 @@ namespace Aura {
 						layer->OnUpdate(1);
 				}
 
-				m_ui.beginFrame();
+				m_ui->BeginFrame();
 				{
 					for (Layer* layer : m_layerStack)
 						layer->OnImGuiRender();
 				}
-				m_ui.endFrame(commandBuffer);
+				m_ui->EndFrame(commandBuffer);
 
 
 				m_renderer.EndSwapChainRenderPass(commandBuffer);
