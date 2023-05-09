@@ -100,9 +100,9 @@ namespace Aura
         samplerInfo.compareEnable = VK_FALSE;
         samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
         samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-        samplerInfo.mipLodBias = 0.0f;
-        samplerInfo.minLod = 0.0f;
-        samplerInfo.maxLod = 0.0f;
+        samplerInfo.minLod = 0.0f; // Optional
+        samplerInfo.maxLod = static_cast<float>(m_mipLevels);
+        samplerInfo.mipLodBias = 0.0f; // Optional
 
         if (vkCreateSampler(m_device.GetDevice(), &samplerInfo, nullptr, &m_sampler) != VK_SUCCESS)
         {
