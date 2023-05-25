@@ -176,4 +176,4 @@ namespace Aura {
 	VkResult Buffer::InvalidateIndex(int index) {
 		return Invalidate(m_alignmentSize, index * m_alignmentSize);
 	}
-}  // namespace lve
+} 

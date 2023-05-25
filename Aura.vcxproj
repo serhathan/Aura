@@ -235,6 +235,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Editor\ContentBrowserPanel.h" />
     <ClInclude Include="src\Cubemap.h" />
     <ClInclude Include="src\Editor\Editor.h" />
     <ClInclude Include="src\LayerStack.h" />
@@ -267,9 +268,9 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\SwapChain.h" />
     <ClInclude Include="src\UI.h" />
-    <ClInclude Include="src\TextureSubSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Editor\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Cubemap.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\LayerStack.cpp" />
@@ -304,7 +305,6 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\SwapChain.cpp" />
     <ClCompile Include="src\UI.cpp" />
-    <ClCompile Include="src\TextureSubSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Libraries\lib\glfw3.lib" />

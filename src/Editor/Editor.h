@@ -4,6 +4,7 @@
 #include <imgui/imgui.h>
 #include "glm/glm.hpp"
 #include "Texture.h"
+#include "ContentBrowserPanel.h"
 
 namespace Aura {
 	class Editor : public Layer
@@ -24,6 +25,8 @@ namespace Aura {
 
 		std::unique_ptr<Texture> m_viewportTexture;
 		Device& m_device;
+
+		std::unique_ptr<ContentBrowserPanel> m_contentBrowserPanel;
 
 	};
 }

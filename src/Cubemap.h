@@ -15,14 +15,15 @@ namespace Aura {
 		Cubemap& operator=(const Cubemap& c) = delete;
 
         VkImageView GetTextureImageView() const { return m_imageView; }
+        VkDescriptorSet GetDescriptorSet() const { return m_descriptorSet; }
         VkSampler GetTextureSampler() const { return m_sampler; }
-        void LoadTexture(std::string filePath);
+        void LoadTexture(std::vector<std::string>& filePaths);
         void UpdateDescriptor();
     public:
         VkDescriptorImageInfo imageDescriptor;
 
     private:
-        void CreateTextureImage(std::string& filePath);
+        void CreateTextureImage(std::vector<std::string>& filePaths);
         void CreateTextureImageView();
         void CreateTextureSampler();
         void GenerateMipmaps();
@@ -34,7 +35,6 @@ namespace Aura {
 
         int m_width, m_height;
         int m_texChannels;
-        Buffer m_stagingBuffer;
         uint32_t m_mipLevels;
 
         Device& m_device;
@@ -45,7 +45,7 @@ namespace Aura {
         VkDeviceMemory m_imageMemory;
         VkFormat m_imageFormat = VK_FORMAT_R8G8B8A8_SRGB;
         VkImageLayout m_imageLayout;
-
+        VkDescriptorSet m_descriptorSet;
 	};
 }
 

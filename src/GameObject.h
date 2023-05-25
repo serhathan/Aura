@@ -21,7 +21,7 @@ namespace Aura {
 	class GameObject
 	{
 	public:
-		using  id_t = unsigned int;
+		using  id_t = uint32_t;
 		using Map = std::unordered_map<id_t, GameObject>;
 
 		static GameObject CreateGameObject() {

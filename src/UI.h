@@ -16,6 +16,7 @@ namespace Aura {
     private:
         static void CheckResult(VkResult result);
         void Cleanup();
+        void SetDarkThemeColors();
 
         VkCommandBuffer beginSingleTimeCommands(VkDevice device, VkCommandPool commandPool);
         void endSingleTimeCommands(VkDevice device, VkCommandPool commandPool, VkQueue graphicsQueue, VkCommandBuffer commandBuffer);

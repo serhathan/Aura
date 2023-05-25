@@ -1,6 +1,7 @@
 #include "Cubemap.h"
 #include "stb_image.h"
 #include <Buffer.h>
+#include <backends/imgui_impl_vulkan.h>
 namespace Aura {
 	Cubemap::Cubemap(Device& device, bool nearestFilter) 
 		: m_device(device), m_nearestFilter(nearestFilter), m_mipLevels(1)
@@ -15,12 +16,13 @@ namespace Aura {
 		vkDestroySampler(m_device.GetDevice(), m_sampler, nullptr);
 	}
 
-	void Cubemap::LoadTexture(std::string filePath)
+	void Cubemap::LoadTexture(std::vector<std::string>& filePaths)
 	{
-		CreateTextureImage(filePath);
+		CreateTextureImage(filePaths);
 		CreateTextureImageView();
 		CreateTextureSampler();
 		UpdateDescriptor();
+		m_descriptorSet = (VkDescriptorSet)ImGui_ImplVulkan_AddTexture(m_sampler, m_imageView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 	}
 
 	void Cubemap::UpdateDescriptor()
@@ -30,15 +32,15 @@ namespace Aura {
 		imageDescriptor.imageLayout = m_imageLayout;
 	}
 
-	void Cubemap::CreateTextureImage(std::string& filePath)
+	void Cubemap::CreateTextureImage(std::vector<std::string>& filePaths)
 	{
-		VkDeviceSize imageSize;
+		/*VkDeviceSize imageSize;
 		VkDeviceSize layerSize;
 		void* data;
 		uint64_t memAddress;
 
 		for (int i = 0; i < NUMBER_OF_CUBEMAP_IMAGES; i++) {
-			stbi_uc* pixels = stbi_load(filePath.c_str(), &m_width, &m_height, &m_texChannels, STBI_rgb_alpha);
+			stbi_uc* pixels = stbi_load(filePaths[i].c_str(), &m_width, &m_height, &m_texChannels, STBI_rgb_alpha);
 			if (!pixels)
 			{
 				throw std::runtime_error("failed to load texture image!");
@@ -48,24 +50,44 @@ namespace Aura {
 			{
 				layerSize = m_width * m_height * m_texChannels;
 				imageSize = m_width * m_height * 4;
-				m_stagingBuffer = { m_device, imageSize, 1, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT };
+				Buffer stagingBuffer = { m_device, imageSize, 1, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT };
 
-				if (m_stagingBuffer.Map())
+				if (stagingBuffer.Map())
 					throw std::runtime_error("failed to allocate vertex buffer memory!");
-				data = m_stagingBuffer.GetMappedMemory();
+				data = stagingBuffer.GetMappedMemory();
 				memAddress = reinterpret_cast<uint64_t>(data);
 			}
-			memcpy(reinterpret_cast<void*>(memAddress), static_cast<void*>(pixels), static_cast<size_t>(layerSize));			stagingBuffer.WriteToBuffer((void*)pixels, imageSize);
+			memcpy(reinterpret_cast<void*>(memAddress), static_cast<void*>(pixels), static_cast<size_t>(layerSize));	
 			stbi_image_free(pixels);
 			memAddress += layerSize;
 
 		}
-		m_stagingBuffer.Unmap();
+		stagingBuffer.Unmap();
 		m_mipLevels = std::floor(std::log2(std::max(m_width, m_height))) + 1;
+		*/
+		
+		stbi_uc* textureData[NUMBER_OF_CUBEMAP_IMAGES];
+
+		for (int i = 0; i < NUMBER_OF_CUBEMAP_IMAGES; i++)
+		{
+			textureData[i] = stbi_load(filePaths[i].c_str(), &m_width, &m_height, &m_texChannels, STBI_rgb_alpha);
+		}
+
+		const VkDeviceSize imageSize = m_width * m_height * 4 * 6; 
+		const VkDeviceSize layerSize = imageSize / 6;
+
+		Buffer stagingBuffer = { m_device, imageSize, 1, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT };
+
+		if (stagingBuffer.Map())
+			throw std::runtime_error("failed to allocate buffer memory!");
 
 		
+		for (int i = 0; i < NUMBER_OF_CUBEMAP_IMAGES; i++)
+		{
+			stagingBuffer.WriteToBuffer((void*)textureData[i], imageSize,layerSize);
+		}
+		stagingBuffer.Unmap();
 
-		
 		VkImageCreateInfo imageInfo{};
 		imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 		imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -84,7 +106,7 @@ namespace Aura {
 
 		m_device.CreateImageWithInfo(imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_image, m_imageMemory);
 		m_device.TransitionImageLayout(m_image, m_imageFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_mipLevels,NUMBER_OF_CUBEMAP_IMAGES);
-		m_device.CopyBufferToImage(m_stagingBuffer.GetBuffer(), m_image, static_cast<uint32_t>(m_width), static_cast<uint32_t>(m_height), NUMBER_OF_CUBEMAP_IMAGES);
+		m_device.CopyBufferToImage(stagingBuffer.GetBuffer(), m_image, static_cast<uint32_t>(m_width), static_cast<uint32_t>(m_height), NUMBER_OF_CUBEMAP_IMAGES);
 		//m_device.TransitionImageLayout(m_image, m_imageFormat, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		GenerateMipmaps();
 		m_imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;

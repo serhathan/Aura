@@ -9,6 +9,7 @@ namespace Aura {
 	}
 	void Editor::OnAttach()
 	{
+		m_contentBrowserPanel = std::make_unique<ContentBrowserPanel>(m_device);
 	}
 	void Editor::OnDetach()
 	{
@@ -18,6 +19,10 @@ namespace Aura {
 	}
 	void Editor::OnImGuiRender()
 	{
+		ImGui::ShowDemoWindow();
+
+		
+
 		{
 			static float f = 0.0f;
 			static int counter = 0;
@@ -49,5 +54,7 @@ namespace Aura {
 
 
 		ImGui::End();
+
+		m_contentBrowserPanel->OnImGuiRender();
 	}
 }
