@@ -23,7 +23,7 @@ namespace Aura {
 
 		builder.SetMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
 		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SwapChain::MAX_FRAMES_IN_FLIGHT);
-		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SwapChain::MAX_FRAMES_IN_FLIGHT);
+		builder.AddPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SwapChain::MAX_FRAMES_IN_FLIGHT+1);
 
 		m_globalPool = builder.Build();
 

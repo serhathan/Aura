@@ -2,6 +2,7 @@
 #include "SwapChain.h"
 #include "stb_image/stb_image.h"
 #include <FrameInfo.h>
+#include <backends/imgui_impl_vulkan.h>
 namespace Aura
 {
     Texture::Texture(Device& device) : m_device(device)
@@ -23,7 +24,7 @@ namespace Aura
         CreateTextureImageView();
         CreateTextureSampler();
         UpdateDescriptor();
-
+        m_descriptorSet = (VkDescriptorSet)ImGui_ImplVulkan_AddTexture(m_sampler, m_imageView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
 
     void Texture::UpdateDescriptor()

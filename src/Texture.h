@@ -15,6 +15,7 @@ namespace Aura
         Texture &operator=(const Texture &&c) = delete;
         Texture &operator=(const Texture &c) = delete;
         VkImageView GetTextureImageView() const { return m_imageView; }
+        VkDescriptorSet GetDescriptorSet() const { return m_descriptorSet; }
         VkSampler GetTextureSampler() const { return m_sampler; }
         void LoadTexture(std::string filePath);
         void UpdateDescriptor(); 
@@ -38,5 +39,6 @@ namespace Aura
         VkDeviceMemory m_imageMemory;
         VkFormat m_imageFormat = VK_FORMAT_R8G8B8A8_SRGB;
         VkImageLayout m_imageLayout;
+        VkDescriptorSet m_descriptorSet;
     };
 }

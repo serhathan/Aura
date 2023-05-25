@@ -179,8 +179,14 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
       </Command>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\simpleShader.vert" -o "$(ProjectDir)shaders\simpleShader.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\simpleShader.frag" -o "$(ProjectDir)shaders\simpleShader.frag.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.vert" -o "$(ProjectDir)shaders\pointLight.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "$(ProjectDir)shaders\pointLight.frag.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.vert" -o "$(ProjectDir)shaders\texture.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.frag" -o "$(ProjectDir)shaders\texture.frag.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.vert" -o "$(ProjectDir)shaders\pbr.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(ProjectDir)shaders\pbr.frag.spv"</Command>
     </PreBuildEvent>
     <PostBuildEvent />
     <PostBuildEvent>
@@ -235,6 +241,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Editor\ContentBrowserPanel.h" />
     <ClInclude Include="src\Editor\Editor.h" />
     <ClInclude Include="src\LayerStack.h" />
     <ClInclude Include="Libraries\include\imgui\backends\imgui_impl_glfw.h" />
@@ -269,6 +276,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <ClInclude Include="src\TextureSubSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Editor\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\LayerStack.cpp" />
     <ClCompile Include="Libraries\include\imgui\backends\imgui_impl_glfw.cpp" />

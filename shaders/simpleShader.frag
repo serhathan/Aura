@@ -47,4 +47,8 @@ void main() {
   vec3 imageColor = texture(image,fragUV).rgb;
   
   outColor = vec4((diffuseLight * fragColor)*imageColor, 1.0);
+
+  // Gamma correction
+  outColor.rgb = pow(outColor.rgb, vec3(1.0/2.2));
+
 }

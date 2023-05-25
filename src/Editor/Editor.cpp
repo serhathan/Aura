@@ -6,6 +6,8 @@ namespace Aura {
 	{
 		m_viewportTexture = std::make_unique<Texture>(device);
 		m_viewportTexture->LoadTexture("textures/viking_room.png");
+		m_contentBrowserPanel = std::make_unique<ContentBrowserPanel>(m_device);
+
 	}
 	void Editor::OnAttach()
 	{
@@ -18,6 +20,9 @@ namespace Aura {
 	}
 	void Editor::OnImGuiRender()
 	{
+
+		ImGui::ShowDemoWindow();
+
 		{
 			static float f = 0.0f;
 			static int counter = 0;
@@ -49,5 +54,7 @@ namespace Aura {
 
 
 		ImGui::End();
+
+		m_contentBrowserPanel->OnImGuiRender();
 	}
 }

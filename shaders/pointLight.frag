@@ -28,4 +28,7 @@ void main() {
     discard;
   }
   outColor = vec4(push.color.xyz, 1.0);
+  // Gamma correction
+  outColor.rgb = pow(outColor.rgb, vec3(1.0/2.2));
+
 }
