@@ -241,6 +241,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\RendererManager.h" />
     <ClInclude Include="src\Editor\ContentBrowserPanel.h" />
     <ClInclude Include="src\Editor\Editor.h" />
@@ -279,6 +280,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <ClInclude Include="src\TextureSubSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\RendererManager.cpp" />
     <ClCompile Include="src\Editor\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />

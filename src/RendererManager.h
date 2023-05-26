@@ -11,10 +11,12 @@ namespace Aura {
 		RendererManager(Device& device);
 
 		std::vector<RendererSubSystem> rendererSubSystems;
+		std::vector<std::unique_ptr<Buffer>> uboBuffers;
+		std::vector<VkDescriptorSet> globalDescriptorSets;
+		std::unique_ptr<DescriptorPool> globalPool;
+
 	private:
 		Device& m_device;
-		std::unique_ptr<DescriptorPool> m_globalPool;
-
 	};
 
 }

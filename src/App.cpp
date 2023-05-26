@@ -15,18 +15,13 @@
 #include <Texture.h>
 #include <TextureSubSystem.h>
 #include "Editor/Editor.h"
-
+#include "RendererManager.h"
 namespace Aura {
 	App::App()
 	{
-	
-
 		loadGameObjects();
-
-		//InitGUI();
 		PushOverlay(m_ui);
 		PushLayer(new Editor(m_device));
-
 	}
 	App::~App()
 	{
@@ -40,12 +35,13 @@ namespace Aura {
 
 		m_texture.LoadTexture("textures/viking_room.png");
 
+	
+		SimpleRenderSystem simpleRenderSystem(m_device, m_renderer.GetSwapChainRenderPass());
+		PointLightSystem pointLight(m_device, m_renderer.GetSwapChainRenderPass());
 
-
-		std::vector<RendererSubSystem> subSystems(2);
-		subSystems.push_back(simpleRenderSystem);
-		subSystems.push_back(pointLight);
-
+		RendererManager::Instance().rendererSubSystems.resize(2);
+		RendererManager::Instance().rendererSubSystems.push_back(simpleRenderSystem);
+		RendererManager::Instance().rendererSubSystems.push_back(pointLight);
 
 
 		
@@ -79,7 +75,7 @@ namespace Aura {
 			{
 				int frameIndex = m_renderer.GetFrameIndex();
 
-				FrameInfo frameInfo = { frameIndex,frameTime,commandBuffer,camera,globalDescriptorSets[frameIndex],m_gameObjects };
+				FrameInfo frameInfo = { frameIndex,frameTime,commandBuffer,camera,RendererManager::Instance().globalDescriptorSets[frameIndex],m_gameObjects };
 
 				//update
 				GlobalUBO ubo{};
@@ -87,17 +83,17 @@ namespace Aura {
 				ubo.projection = camera.GetProjection();
 				ubo.view = camera.GetView();
 
-				for (auto& sys : subSystems)
+				for (auto& sys : RendererManager::Instance().rendererSubSystems)
 				{
 					sys.Update(frameInfo, ubo);
 				}
 
-				uboBuffers[frameIndex]->WriteToBuffer(&ubo);
-				uboBuffers[frameIndex]->Flush();
+				RendererManager::Instance().uboBuffers[frameIndex]->WriteToBuffer(&ubo);
+				RendererManager::Instance().uboBuffers[frameIndex]->Flush();
 				// render
 				m_renderer.BeginSwapChainRenderPass(commandBuffer);
 
-				for (auto& sys : subSystems)
+				for (auto& sys : RendererManager::Instance().rendererSubSystems)
 				{
 					sys.Render(frameInfo);
 				}
@@ -208,6 +204,14 @@ namespace Aura {
 		model = Model::CreateModelFormFile(m_device, "models/viking_room.obj");
 		auto cube = GameObject::CreateGameObject();
 		cube.model = model;
+
+		auto descriptorSetLayout = DescriptorSetLayout::Builder(m_device)
+			.AddBinding(0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+			.Build();
+
+		model->material = Material::Create(m_device, std::move(descriptorSetLayout));
+		model->material->baseColorTexture = new Texture(m_device);
+		model->material->baseColorTexture->LoadTexture("textures/viking_room.png");
 		cube.transform.translation = { 0.2f,.2f,0.f };
 		cube.transform.rotation = { 45.f,90.f,0.f };
 		cube.transform.scale = { 1.f,1.f,1.f };

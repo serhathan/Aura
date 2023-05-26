@@ -6,6 +6,7 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include "Buffer.h"
+#include <Material.h>
 
 namespace Aura {
 	struct Vertex
@@ -61,9 +62,13 @@ namespace Aura {
 
 		static std::unique_ptr<Model> CreateModelFormFile(Device& device, const std::string& filePath);
 
+		std::shared_ptr<Material> material;
+
+
 	private:
 		void CreateVertexBuffer(const std::vector<Vertex>& vertices);
 		void CreateIndexBuffer(const std::vector<uint32_t>& indices);
+
 
 		Device& m_device;
 
