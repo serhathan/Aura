@@ -13,7 +13,7 @@ namespace Aura {
 	public:
 		~Material();
 
-		static inline std::shared_ptr<Material> Create(Device& device, std::unique_ptr<DescriptorSetLayout> descriptorSetLayout);
+		static inline std::shared_ptr<Material> Create(Device& device, DescriptorPool* descriptorPool, std::unique_ptr<DescriptorSetLayout> descriptorSetLayout);
 		void CreateDescriptorSet();
 	public:
 		Texture* baseColorTexture = nullptr;
@@ -22,11 +22,10 @@ namespace Aura {
 		std::vector<VkDescriptorSet> descriptorSets;
 		std::unique_ptr<DescriptorSetLayout> descriptorSetLayout;
 	protected:
-		Material(Device& device, std::unique_ptr<DescriptorSetLayout> descriptorSetLayout);
-
+		Material(Device& device,DescriptorPool* descriptorPool, std::unique_ptr<DescriptorSetLayout> descriptorSetLayout);
 
 	private:
 		Device& m_device;
-
+		DescriptorPool* m_globalPool;
 	};
 }

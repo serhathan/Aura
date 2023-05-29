@@ -7,6 +7,11 @@
 #include <glm/glm.hpp>
 #include "Buffer.h"
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+
 namespace Aura {
 	struct Vertex
 	{
@@ -39,12 +44,28 @@ namespace Aura {
 		}
 	};
 
+	class Mesh {
+	public:
+		std::vector<Vertex> vertices;
+		std::vector<uint32_t> indices;
+		Mesh(std::vector<Vertex> v, std::vector<uint32_t> i) {
+			this->vertices = v;
+			this->indices = i;
+		}
+	};
+
 	struct Builder
 	{
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
-
+		std::vector<Mesh> meshes;
 		void LoadModel(const std::string& filePath);
+		void LoadModelASSIMP(const std::string& filePath);
+		void ProcessNode(aiNode* node, const aiScene* scene);
+		Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
+
+		std::string directory;
+
 	};
 
 	class Model
@@ -60,7 +81,7 @@ namespace Aura {
 		void Draw(VkCommandBuffer commandBuffer);
 
 		static std::unique_ptr<Model> CreateModelFormFile(Device& device, const std::string& filePath);
-
+		//std::shared_ptr<Material> material;
 	private:
 		void CreateVertexBuffer(const std::vector<Vertex>& vertices);
 		void CreateIndexBuffer(const std::vector<uint32_t>& indices);
