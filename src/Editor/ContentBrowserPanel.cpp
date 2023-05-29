@@ -9,9 +9,9 @@ namespace Aura {
 		: m_device(device), m_BaseDirectory("F:/Dev C/Aura"), m_CurrentDirectory(m_BaseDirectory)
 	{
 		m_DirectoryIcon = std::make_shared<Texture>(m_device);
-		m_DirectoryIcon->LoadTexture("textures/texture.jpg");
+		m_DirectoryIcon->LoadTexture("textures/white.png",true);
 		m_FileIcon = std::make_shared<Texture>(m_device);
-		m_FileIcon->LoadTexture("textures/viking_room.png");
+		m_FileIcon->LoadTexture("textures/FileIcon.png",true);
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()

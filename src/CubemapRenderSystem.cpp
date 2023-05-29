@@ -1,43 +1,30 @@
-#include "SimpleRenderSystem.h"
+#include "CubemapRenderSystem.h"
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
+
 namespace Aura {
 
-	struct SimplePushConstantData
-	{
-		glm::mat4 modelMatrix{ 1.f };
-		glm::mat4 normalMatrix{ 1.f };
-	};
 
-	SimpleRenderSystem::SimpleRenderSystem(Device& device, VkRenderPass renderPass)
-		: RendererSubSystem(device, renderPass)
+	CubemapRenderSystem::CubemapRenderSystem(Device& device, VkRenderPass renderPass, std::vector<VkDescriptorSetLayout>& descriptorSetLayouts) : m_device(device)
 	{
-		CreatePipelineLayout({ globalSetLayout->GetDescriptorSetLayout() });
-		CreatePipeline(renderPass);
-	}
-
-	SimpleRenderSystem::SimpleRenderSystem(Device& device, VkRenderPass renderPass, std::vector<VkDescriptorSetLayout> descriptorSetLayouts)
-		: RendererSubSystem(device, renderPass)
-	{
-		descriptorSetLayouts.insert(descriptorSetLayouts.cbegin(), globalSetLayout->GetDescriptorSetLayout());
 		CreatePipelineLayout(descriptorSetLayouts);
 		CreatePipeline(renderPass);
 	}
-
-	SimpleRenderSystem::~SimpleRenderSystem()
+	CubemapRenderSystem::~CubemapRenderSystem()
 	{
 		vkDestroyPipelineLayout(m_device.GetDevice(), m_pipelineLayout, nullptr);
 	}
 
 
-	void SimpleRenderSystem::CreatePipelineLayout(std::vector<VkDescriptorSetLayout> descriptorSetLayouts)
+
+	void CubemapRenderSystem::CreatePipelineLayout(std::vector<VkDescriptorSetLayout>& descriptorSetLayouts)
 	{
 		VkPushConstantRange pushConstantRange{};
 		pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 		pushConstantRange.offset = 0;
-		pushConstantRange.size = sizeof(SimplePushConstantData);
+		pushConstantRange.size = sizeof(PushConstantDataCubemap);
 
 
 		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
@@ -51,7 +38,7 @@ namespace Aura {
 		}
 	}
 
-	void SimpleRenderSystem::CreatePipeline(VkRenderPass renderPass)
+	void CubemapRenderSystem::CreatePipeline(VkRenderPass renderPass)
 	{
 		assert(m_pipelineLayout != nullptr && "Cannot create pipeline before pipeline layout");
 		PipelineConfigInfo pipelineConfig{};
@@ -59,31 +46,33 @@ namespace Aura {
 
 		pipelineConfig.renderPass = renderPass;
 		pipelineConfig.pipelineLayout = m_pipelineLayout;
-		m_pipeline = std::make_unique<Pipeline>(m_device, "shaders/simpleShader.vert.spv", "shaders/simpleShader.frag.spv", pipelineConfig);
+		pipelineConfig.rasterizationInfo.cullMode = VK_CULL_MODE_BACK_BIT;
+
+		pipelineConfig.depthStencilInfo.depthTestEnable = VK_FALSE;
+		pipelineConfig.depthStencilInfo.depthWriteEnable = VK_FALSE;
+
+		m_pipeline = std::make_unique<Pipeline>(m_device, "shaders/skybox.vert.spv", "shaders/skybox.frag.spv", pipelineConfig);
 	}
 
-	void SimpleRenderSystem::Update(FrameInfo& frameInfo, GlobalUBO& ubo)
-	{
-	}
-
-	void SimpleRenderSystem::Render(FrameInfo& frameInfo)
+	void CubemapRenderSystem::RenderGameObjects(FrameInfo& frameInfo)
 	{
 		m_pipeline->Bind(frameInfo.commandBuffer);
 
-		vkCmdBindDescriptorSets(frameInfo.commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipelineLayout, 0, 1, &frameInfo.globalDescriptorSet, 0, nullptr);
+		std::vector<VkDescriptorSet> descriptorSets = { frameInfo.globalDescriptorSet };
+
+		vkCmdBindDescriptorSets(frameInfo.commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipelineLayout, 0, 2, descriptorSets.data(), 0, nullptr);
 
 
 		for (auto& kv : frameInfo.gameObjects) {
 			auto& obj = kv.second;
 			if (obj.model == nullptr) continue;
-			SimplePushConstantData push{};
+			PushConstantDataCubemap push{};
 			push.modelMatrix = obj.transform.mat4();
 			push.normalMatrix = obj.transform.normalMatrix();
 
-			vkCmdPushConstants(frameInfo.commandBuffer, m_pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
+			vkCmdPushConstants(frameInfo.commandBuffer, m_pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantDataCubemap), &push);
 			obj.model->Bind(frameInfo.commandBuffer);
 			obj.model->Draw(frameInfo.commandBuffer);
 		}
 	}
-
 }

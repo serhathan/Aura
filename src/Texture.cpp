@@ -18,9 +18,9 @@ namespace Aura
 
     }
 
-    void Texture::LoadTexture(std::string filePath)
+    void Texture::LoadTexture(std::string filePath, bool flip)
     {
-        CreateTextureImage(filePath);
+        CreateTextureImage(filePath, flip);
         CreateTextureImageView();
         CreateTextureSampler();
         UpdateDescriptor();
@@ -34,8 +34,10 @@ namespace Aura
         imageDescriptor.imageLayout = m_imageLayout;
     }
 
-    void Texture::CreateTextureImage(std::string& filePath)
+    void Texture::CreateTextureImage(std::string& filePath, bool flip)
     {
+        stbi_set_flip_vertically_on_load(flip);
+
         int texChannels;
         stbi_uc *pixels = stbi_load(filePath.c_str(), &m_width, &m_height, &texChannels, STBI_rgb_alpha);
         VkDeviceSize imageSize = m_width * m_height * 4;

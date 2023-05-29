@@ -12,10 +12,19 @@ namespace Aura {
 		float radius;
 	};
 
-	PointLightSystem::PointLightSystem(Device& device, VkRenderPass m_renderPass, VkDescriptorSetLayout globalSetLayout) : m_device(device)
+	PointLightSystem::PointLightSystem(Device& device, VkRenderPass renderPass)
+		: RendererSubSystem(device, renderPass)
 	{
-		CreatePipelineLayout(globalSetLayout);
-		CreatePipeline(m_renderPass);
+		CreatePipelineLayout({ globalSetLayout->GetDescriptorSetLayout() });
+		CreatePipeline(renderPass);
+	}
+
+	PointLightSystem::PointLightSystem(Device& device, VkRenderPass renderPass, std::vector<VkDescriptorSetLayout> descriptorSetLayouts)
+		: RendererSubSystem(device, renderPass)
+	{
+		descriptorSetLayouts.insert(descriptorSetLayouts.cbegin(), globalSetLayout->GetDescriptorSetLayout());
+		CreatePipelineLayout(descriptorSetLayouts);
+		CreatePipeline(renderPass);
 	}
 
 	PointLightSystem::~PointLightSystem()
@@ -23,14 +32,12 @@ namespace Aura {
 		vkDestroyPipelineLayout(m_device.GetDevice(), m_pipelineLayout, nullptr);
 	}
 
-	void PointLightSystem::CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout)
+	void PointLightSystem::CreatePipelineLayout(std::vector<VkDescriptorSetLayout> descriptorSetLayouts)
 	{
 		VkPushConstantRange pushConstantRange{};
 		pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 		pushConstantRange.offset = 0;
 		pushConstantRange.size = sizeof(PointLightPushConstants);
-
-		std::vector<VkDescriptorSetLayout> descriptorSetLayouts{ globalSetLayout };
 
 		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -38,10 +45,9 @@ namespace Aura {
 		pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.data();
 		pipelineLayoutInfo.pushConstantRangeCount = 1;
 		pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
-		if (vkCreatePipelineLayout(m_device.GetDevice(), &pipelineLayoutInfo, nullptr, &m_pipelineLayout) !=VK_SUCCESS) {
+		if (vkCreatePipelineLayout(m_device.GetDevice(), &pipelineLayoutInfo, nullptr, &m_pipelineLayout) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create pipeline layout!");
 		}
-
 	}
 
 	void PointLightSystem::CreatePipeline(VkRenderPass m_renderPass)
@@ -63,7 +69,7 @@ namespace Aura {
 		m_pipeline->Bind(frameInfo.commandBuffer);
 
 		vkCmdBindDescriptorSets(frameInfo.commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipelineLayout, 0, 1, &frameInfo.globalDescriptorSet, 0, nullptr);
-		
+
 		for (auto& kv : frameInfo.gameObjects) {
 			auto& obj = kv.second;
 			if (obj.pointLight == nullptr) continue;
@@ -73,8 +79,8 @@ namespace Aura {
 			push.color = glm::vec4(obj.color, obj.pointLight->lightIntensity);
 			push.radius = obj.transform.scale.x;
 
-			vkCmdPushConstants(frameInfo.commandBuffer,m_pipelineLayout,VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-				0,sizeof(PointLightPushConstants),&push);
+			vkCmdPushConstants(frameInfo.commandBuffer, m_pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0, sizeof(PointLightPushConstants), &push);
 			vkCmdDraw(frameInfo.commandBuffer, 6, 1, 0, 0);
 		}
 	}
@@ -100,4 +106,3 @@ namespace Aura {
 		ubo.numLights = lightIndex;
 	}
 }
-

@@ -1,33 +1,24 @@
 #pragma once
 #include"pch.h"
-#include <Pipeline.h>
-#include "Device.h"
 #include <GameObject.h>
 #include <Camera.h>
-#include "FrameInfo.h"
+#include "RendererSubSystem.h"
 namespace Aura {
-
-	
-
-	class SimpleRenderSystem
+	class SimpleRenderSystem : public RendererSubSystem
 	{
 	public:
-		SimpleRenderSystem(Device& device,VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
+		SimpleRenderSystem(Device& device, VkRenderPass renderPass);
+		SimpleRenderSystem(Device& device, VkRenderPass renderPass, std::vector<VkDescriptorSetLayout> descriptorSetLayouts);
 		~SimpleRenderSystem();
 
 		SimpleRenderSystem(const SimpleRenderSystem& c) = delete;
 		SimpleRenderSystem& operator=(const SimpleRenderSystem& c) = delete;
 
-		void RenderGameObjects(FrameInfo& frameInfo);
-
+		virtual void Update(FrameInfo& frameInfo, GlobalUBO& ubo) override;
+		virtual void Render(FrameInfo& frameInfo) override;
 	private:
-	
-		void CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout);
-		void CreatePipeline(VkRenderPass renderPass);
+		virtual void CreatePipelineLayout(std::vector<VkDescriptorSetLayout> descriptorSetLayouts) override;
+		virtual void CreatePipeline(VkRenderPass renderPass) override;
 
-		Device &m_device;
-		std::unique_ptr<Pipeline> m_pipeline;
-		VkPipelineLayout m_pipelineLayout;
 	};
 }
-

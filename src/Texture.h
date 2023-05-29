@@ -17,13 +17,13 @@ namespace Aura
         VkImageView GetTextureImageView() const { return m_imageView; }
         VkDescriptorSet GetDescriptorSet() const { return m_descriptorSet; }
         VkSampler GetTextureSampler() const { return m_sampler; }
-        void LoadTexture(std::string filePath);
+        void LoadTexture(std::string filePath, bool flip = false);
         void UpdateDescriptor(); 
     public:
         VkDescriptorImageInfo imageDescriptor;
 
     private:
-        void CreateTextureImage(std::string& filePath);
+        void CreateTextureImage(std::string& filePath, bool flip);
         void CreateTextureImageView();
         void CreateTextureSampler();
         void GenerateMipmaps();

@@ -114,6 +114,18 @@
     <ClInclude Include="src\Editor\ContentBrowserPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cubemap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CubemapRenderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RendererSubSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Singleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -206,6 +218,12 @@
     <ClCompile Include="src\Editor\ContentBrowserPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cubemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CubemapRenderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Libraries\lib\vulkan-1.lib" />
@@ -229,6 +247,8 @@
     <None Include="shaders\pbr.vert" />
     <None Include="shaders\texture.vert" />
     <None Include="shaders\texture.frag" />
+    <None Include="shaders\skybox.frag" />
+    <None Include="shaders\skybox.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\texture.jpg">

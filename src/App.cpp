@@ -72,8 +72,8 @@ namespace Aura {
 
 
 
-		SimpleRenderSystem simpleRenderSystem(m_device, m_renderer.GetSwapChainRenderPass(), globalSetLayout->GetDescriptorSetLayout());
-		PointLightSystem pointLight(m_device, m_renderer.GetSwapChainRenderPass(), globalSetLayout->GetDescriptorSetLayout());
+		SimpleRenderSystem simpleRenderSystem(m_device, m_renderer.GetSwapChainRenderPass());
+		PointLightSystem pointLight(m_device, m_renderer.GetSwapChainRenderPass());
 		//TextureSubSystem textureSubSystem(m_device, m_renderer.GetSwapChainRenderPass(), globalSetLayout->GetDescriptorSetLayout());
 
 		Camera camera{};
@@ -121,7 +121,7 @@ namespace Aura {
 				uboBuffers[frameIndex]->Flush();
 				// render
 				m_renderer.BeginSwapChainRenderPass(commandBuffer);
-				simpleRenderSystem.RenderGameObjects(frameInfo);
+				simpleRenderSystem.Render(frameInfo);
 				pointLight.Render(frameInfo);
 				//textureSubSystem.RenderGameObjects(frameInfo);
 

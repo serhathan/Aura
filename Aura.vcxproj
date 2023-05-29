@@ -197,7 +197,9 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pointLight.frag" -o "
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.vert" -o "$(ProjectDir)shaders\texture.vert.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\texture.frag" -o "$(ProjectDir)shaders\texture.frag.spv"
 C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.vert" -o "$(ProjectDir)shaders\pbr.vert.spv"
-C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(ProjectDir)shaders\pbr.frag.spv"</Command>
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(ProjectDir)shaders\pbr.frag.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\skybox.vert" -o "$(ProjectDir)shaders\skybox.vert.spv"
+C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\skybox.frag" -o "$(ProjectDir)shaders\skybox.frag.spv"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -241,6 +243,8 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Cubemap.h" />
+    <ClInclude Include="src\CubemapRenderSystem.h" />
     <ClInclude Include="src\Editor\ContentBrowserPanel.h" />
     <ClInclude Include="src\Editor\Editor.h" />
     <ClInclude Include="src\LayerStack.h" />
@@ -260,6 +264,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <ClInclude Include="src\Descriptors.h" />
     <ClInclude Include="src\Keyboard.h" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\RendererSubSystem.h" />
     <ClInclude Include="src\SimpleRenderSystem.h" />
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Model.h" />
@@ -268,6 +273,7 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\Singleton.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
@@ -276,6 +282,8 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <ClInclude Include="src\TextureSubSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Cubemap.cpp" />
+    <ClCompile Include="src\CubemapRenderSystem.cpp" />
     <ClCompile Include="src\Editor\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\LayerStack.cpp" />
@@ -328,6 +336,8 @@ C:\VulkanSDK\1.3.236.0\Bin\glslc.exe "$(ProjectDir)shaders\pbr.frag" -o "$(Proje
     <None Include="shaders\pointLight.vert" />
     <None Include="shaders\simpleShader.frag" />
     <None Include="shaders\simpleShader.vert" />
+    <None Include="shaders\skybox.frag" />
+    <None Include="shaders\skybox.vert" />
     <None Include="shaders\texture.frag" />
     <None Include="shaders\texture.vert" />
   </ItemGroup>
