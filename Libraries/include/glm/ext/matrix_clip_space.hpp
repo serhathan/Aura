@@ -44,7 +44,7 @@ namespace glm
 		T left, T right, T bottom, T top);
 
 	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	///
@@ -54,7 +54,7 @@ namespace glm
 		T left, T right, T bottom, T top, T zNear, T zFar);
 
 	/// Creates a matrix for an orthographic parallel viewing volume using right-handed coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	///
@@ -64,7 +64,7 @@ namespace glm
 		T left, T right, T bottom, T top, T zNear, T zFar);
 
 	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	///
@@ -74,7 +74,7 @@ namespace glm
 		T left, T right, T bottom, T top, T zNear, T zFar);
 
 	/// Creates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	///
@@ -84,7 +84,7 @@ namespace glm
 		T left, T right, T bottom, T top, T zNear, T zFar);
 
 	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	///
@@ -94,7 +94,7 @@ namespace glm
 		T left, T right, T bottom, T top, T zNear, T zFar);
 
 	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	///
@@ -104,8 +104,8 @@ namespace glm
 		T left, T right, T bottom, T top, T zNear, T zFar);
 
 	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.
-	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
-	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	///
@@ -115,8 +115,8 @@ namespace glm
 		T left, T right, T bottom, T top, T zNear, T zFar);
 
 	/// Creates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.
-	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
-	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	///
@@ -137,7 +137,7 @@ namespace glm
 		T left, T right, T bottom, T top, T zNear, T zFar);
 
 	/// Creates a left handed frustum matrix.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	template<typename T>
@@ -145,7 +145,7 @@ namespace glm
 		T left, T right, T bottom, T top, T near, T far);
 
 	/// Creates a left handed frustum matrix.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	template<typename T>
@@ -153,7 +153,7 @@ namespace glm
 		T left, T right, T bottom, T top, T near, T far);
 
 	/// Creates a right handed frustum matrix.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	template<typename T>
@@ -161,7 +161,7 @@ namespace glm
 		T left, T right, T bottom, T top, T near, T far);
 
 	/// Creates a right handed frustum matrix.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	template<typename T>
@@ -169,7 +169,7 @@ namespace glm
 		T left, T right, T bottom, T top, T near, T far);
 
 	/// Creates a frustum matrix using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	template<typename T>
@@ -177,7 +177,7 @@ namespace glm
 		T left, T right, T bottom, T top, T near, T far);
 
 	/// Creates a frustum matrix using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	template<typename T>
@@ -185,8 +185,8 @@ namespace glm
 		T left, T right, T bottom, T top, T near, T far);
 
 	/// Creates a left handed frustum matrix.
-	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
-	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	template<typename T>
@@ -194,8 +194,8 @@ namespace glm
 		T left, T right, T bottom, T top, T near, T far);
 
 	/// Creates a right handed frustum matrix.
-	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
-	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @tparam T A floating-point scalar type
 	template<typename T>
@@ -213,7 +213,7 @@ namespace glm
 
 
 	/// Creates a matrix for a right handed, symetric perspective-view frustum.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
 	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
@@ -226,7 +226,7 @@ namespace glm
 		T fovy, T aspect, T near, T far);
 
 	/// Creates a matrix for a right handed, symetric perspective-view frustum.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
 	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
@@ -239,7 +239,7 @@ namespace glm
 		T fovy, T aspect, T near, T far);
 
 	/// Creates a matrix for a left handed, symetric perspective-view frustum.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
 	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
@@ -252,7 +252,7 @@ namespace glm
 		T fovy, T aspect, T near, T far);
 
 	/// Creates a matrix for a left handed, symetric perspective-view frustum.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
 	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
@@ -265,7 +265,7 @@ namespace glm
 		T fovy, T aspect, T near, T far);
 
 	/// Creates a matrix for a symetric perspective-view frustum using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
 	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
@@ -278,7 +278,7 @@ namespace glm
 		T fovy, T aspect, T near, T far);
 
 	/// Creates a matrix for a symetric perspective-view frustum using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
 	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
@@ -291,8 +291,8 @@ namespace glm
 		T fovy, T aspect, T near, T far);
 
 	/// Creates a matrix for a right handed, symetric perspective-view frustum.
-	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
-	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
 	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
@@ -305,8 +305,8 @@ namespace glm
 		T fovy, T aspect, T near, T far);
 
 	/// Creates a matrix for a left handed, symetric perspective-view frustum.
-	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
-	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
 	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
@@ -333,7 +333,7 @@ namespace glm
 		T fovy, T aspect, T near, T far);
 
 	/// Builds a perspective projection matrix based on a field of view using right-handed coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @param fov Expressed in radians.
 	/// @param width Width of the viewport
@@ -347,7 +347,7 @@ namespace glm
 		T fov, T width, T height, T near, T far);
 
 	/// Builds a perspective projection matrix based on a field of view using right-handed coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fov Expressed in radians.
 	/// @param width Width of the viewport
@@ -361,7 +361,7 @@ namespace glm
 		T fov, T width, T height, T near, T far);
 
 	/// Builds a perspective projection matrix based on a field of view using left-handed coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @param fov Expressed in radians.
 	/// @param width Width of the viewport
@@ -375,7 +375,7 @@ namespace glm
 		T fov, T width, T height, T near, T far);
 
 	/// Builds a perspective projection matrix based on a field of view using left-handed coordinates.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fov Expressed in radians.
 	/// @param width Width of the viewport
@@ -389,7 +389,7 @@ namespace glm
 		T fov, T width, T height, T near, T far);
 
 	/// Builds a perspective projection matrix based on a field of view using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
-	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
 	///
 	/// @param fov Expressed in radians.
 	/// @param width Width of the viewport
@@ -403,7 +403,7 @@ namespace glm
 		T fov, T width, T height, T near, T far);
 
 	/// Builds a perspective projection matrix based on a field of view using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
-	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// The near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fov Expressed in radians.
 	/// @param width Width of the viewport
@@ -417,8 +417,8 @@ namespace glm
 		T fov, T width, T height, T near, T far);
 
 	/// Builds a right handed perspective projection matrix based on a field of view.
-	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
-	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fov Expressed in radians.
 	/// @param width Width of the viewport
@@ -432,8 +432,8 @@ namespace glm
 		T fov, T width, T height, T near, T far);
 
 	/// Builds a left handed perspective projection matrix based on a field of view.
-	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
-	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized m_device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized m_device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
 	///
 	/// @param fov Expressed in radians.
 	/// @param width Width of the viewport
